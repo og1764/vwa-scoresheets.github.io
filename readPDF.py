@@ -2,15 +2,15 @@ import pandas as pd
 import definitions
 
 
-def master(venues, league, date, token):
+def get_fixtures(venues, league, date):
     head = 'https://vwa.bracketpal.com/dailyform/'
     fixtures = list()
     for i in league:
-        print(head)
-        print(i)
-        print(date)
+        #print(head)
+        #print(i)
+        #print(date)
         url = head + str(i) + "/" + str(date)
-        print(url)
+        #print(url)
         table_MN = pd.read_html(url)
         try:
             df = table_MN[2]
@@ -23,9 +23,9 @@ def master(venues, league, date, token):
                         team_b = row[5]
                         try:
                             duty = row[7][5:]
-                        except TypeError:
+                        except (TypeError, KeyError):
                             duty = " "
-                        division = definitions.div_dict[url.split('/')[-2]][1]
+                        division = definitions.div_dict[url.split('/')[-2]]
                         _date = url.split('/')[-1].split('-')
                         date_dd = _date[2]
                         date_mm = _date[1]
@@ -38,22 +38,40 @@ def master(venues, league, date, token):
                         venue_0 = tmp_venue[0]
                         venue_1 = tmp_venue[1]
                         venue_2 = tmp_venue[2]
+                        venue_full = " ".join(tmp_venue)
 
-                        fixture = definitions.Fixture(venue, venue_0, venue_1, venue_2, court, team_a, team_b, duty,
+                        fixture = definitions.Fixture(venue, venue_0, venue_1, venue_2, venue_full, court, team_a, team_b, duty,
                                                       division, date_dd, date_mm, date_yyyy, time_hr, time_min)
                         fixtures.append(fixture)
+                    else:
+                        print(venue)
         except IndexError:
             pass
 
-    files = []
+    return fixtures
 
-    for i in fixtures:
-        file_out = definitions.APP_ROOT + "\\WAVL Scoresheets\\temp\\" + token + "\\" + i.venue + "-" + i.court + "-" + i.time_hr + i.time_min + ".pdf"
-        canvas_data = definitions.get_overlay_canvas(i)
-        form = definitions.merge(canvas_data, template_path=definitions.pdf_default)
+
+def full_pdf(fixtures, token, files=list()):
+    for fixture in fixtures:
+        file_out = definitions.APP_ROOT + "\\Scoresheets\\temp\\" + token + "\\" + fixture.venue + "-" + fixture.court + "-" + fixture.time_hr + fixture.time_min + ".pdf"
+        canvas_data = definitions.get_overlay_canvas_wavl(fixture)
+        form = definitions.merge(canvas_data, template_path=definitions.wavl_pdf_default)
         definitions.save(form, filename=file_out)
         files.append(file_out)
+    return files
 
-    output = definitions.APP_ROOT + "\\WAVL Scoresheets\\output\\" + token + ".pdf"
+
+def jl_pdf(fixtures, token, files):
+    for fixture in fixtures:
+        file_out = definitions.APP_ROOT + "\\Scoresheets\\temp\\" + token + "\\" + fixture.venue + "-" + fixture.court + "-" + fixture.time_hr + fixture.time_min + ".pdf"
+        canvas_data = definitions.get_overlay_canvas_jl(fixture)
+        form = definitions.merge(canvas_data, template_path=definitions.jl_pdf_default)
+        definitions.save(form, filename=file_out)
+        files.append(file_out)
+    return files
+
+
+def generate_output(files, token):
+    output = definitions.APP_ROOT + "\\output\\" + token + ".pdf"
     files.sort()
     definitions.merge_pdfs(files, output)

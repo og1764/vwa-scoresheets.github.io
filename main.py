@@ -11,27 +11,37 @@ from flask import send_file
 app = Flask(__name__)
 
 
-@app.route("/")
+@app.route("/WAVL")
 def home():
     return render_template("home.html")
 
 
-@app.route("/WAVL", methods=["PUT", "POST"])
+@app.route("/WAVL/PUT", methods=["PUT", "POST"])
 def WAVL():
     venue_str = request.headers.get("VENUES")
     div_str = request.headers.get("DIVISIONS")
     date = request.headers.get("yyyymmdd") # yyyy-mm-dd
 
-    venue_usage = [definitions.venues_list[i] for i in range(len(definitions.venues_list)) if venue_str[i] == "1"]
-    league_usage = [definitions.div_list[i] for i in range(len(definitions.div_list)) if div_str[i] == "1"]
+    # TODO: Add Venues
+    #venue_usage = [definitions.venues_list[i] for i in range(len(definitions.venues_list)) if venue_str[i] == "1"]
+    #league_usage = [definitions.wavl_div_list[i] for i in range(len(definitions.wavl_div_list)) if div_str[i] == "1"]
+
+    date = "2021-05-21"
+    league_usage = definitions.jl_div_list
+    #venue_usage = definitions.venues_list
+    venue_usage=["The Rise"]
 
     # token generation
     token = ''.join(random.choice(string.ascii_letters) for i in range(12))
-    while os.path.exists(definitions.APP_ROOT + "\\WAVL Scoresheets\\temp\\" + token):
+    while os.path.exists(definitions.APP_ROOT + "\\Scoresheets\\temp\\" + token):
         token = ''.join(random.choice(string.ascii_letters) for i in range(12))
-    os.mkdir(definitions.APP_ROOT + "\\WAVL Scoresheets\\temp\\" + token)
+    os.mkdir(definitions.APP_ROOT + "\\Scoresheets\\temp\\" + token)
 
-    readPDF.master(venue_usage, league_usage, date, token)
+    fixtures = readPDF.get_fixtures(venue_usage, league_usage, date)
+
+    files = readPDF.jl_pdf(fixtures, token, list())
+
+    readPDF.generate_output(files, token)
 
     return token
 
@@ -42,7 +52,7 @@ def WAVL_download(token):
     print(token2)
     print(definitions.APP_ROOT)
     print(token)
-    return send_file(definitions.APP_ROOT + "\\WAVL Scoresheets\\output\\" + token + ".pdf")
+    return send_file(definitions.APP_ROOT + "\\output\\" + token + ".pdf")
 
 
 
@@ -95,13 +105,13 @@ for i in leagues:
 
 
 
-pdf_default = definitions.APP_ROOT + "\\WAVL Scoresheets\\def.pdf"
+wavl_pdf_default = definitions.APP_ROOT + "\\WAVL Scoresheets\\def.pdf"
 
 files = []
 for i in fixtures:
     file_out = definitions.APP_ROOT + "\\WAVL Scoresheets\\temp\\" + token + "\\" + i.venue + "-" + i.court + "-" + i.time_hr + i.time_min + ".pdf"
     canvas_data = definitions.get_overlay_canvas(i)
-    form = definitions.merge(canvas_data, template_path=pdf_default)
+    form = definitions.merge(canvas_data, template_path=wavl_pdf_default)
     definitions.save(form, filename=file_out)
     files.append(file_out)
 

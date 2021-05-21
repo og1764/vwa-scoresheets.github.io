@@ -2,7 +2,7 @@ function main(){
     console.log("HERE")
     var venues = "";
     var leagues = "";
-    const url = '/WAVL';
+    const url = '/WAVjL/PUT';
     var date = document.getElementById("date").value;
 
     document.getElementsByName("Venue").forEach((checkbox) => {

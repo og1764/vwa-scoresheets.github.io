@@ -8,11 +8,12 @@ from reportlab.lib.pagesizes import A4, landscape
 
 
 class Fixture:
-    def __init__(self, venue, venue_0, venue_1, venue_2, court, team_a, team_b, duty, division, date_dd, date_mm, date_yyyy, time_hr, time_min):
+    def __init__(self, venue, venue_0, venue_1, venue_2, venue_full, court, team_a, team_b, duty, division, date_dd, date_mm, date_yyyy, time_hr, time_min):
         self.venue = venue
         self.venue_2 = venue_2
         self.venue_1 = venue_1
         self.venue_0 = venue_0
+        self.venue_full = venue_full
         self.court = court
         self.team_a = team_a
         self.team_b = team_b
@@ -35,6 +36,7 @@ class Fixture:
             "venue_0": self.venue_0,
             "venue_1": self.venue_1,
             "venue_2": self.venue_2,
+            "venue_full": self.venue_full,
             "court": self.court,
             "team_a": self.team_a,
             "team_b": self.team_b,
@@ -47,6 +49,7 @@ class Fixture:
             "time_min": self.time_min
                 }
 
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 venues_dict = {
     "aquinas college": "*Aquinas*College",
@@ -54,13 +57,17 @@ venues_dict = {
     "cockburn": "**Cockburn",
     "curtin stadium": "*Curtin*Stadium",
     "ecu mt. lawley": "*ECU*Mt. Lawley",
-    "geographe leisure": "*Geographe*Leisure",
+    "geographe leisure": "Geographe*Leisure*Centre",
     "kingsway": "**Kingsway",
     "loftus": "**Loftus",
     "mandurah arc": "*Mandurah*ARC",
+    "mbc": "**MBC",
     "melville leisurefit": "*Melville*LeisureFit",
     "methodist l. col": "Methodist*Ladies*College",
     "mlc": "Methodist*Ladies*College",
+    "penrhos college": "*Penrhos*College",
+    "rossmoyne": "**Rossmoyne",
+    "st mary's": "**St Mary's",
     "the rise": "**The Rise",
     "uwa rec. centre": "UWA*Recreation*Centre",
     "warwick": "**Warwick",
@@ -78,20 +85,36 @@ venues_list = [
     "Geographe Leisure",
     "Kingsway",
     "Mandurah ARC",
+    "MBC",
     "Melville LeisureFit",
     "Methodist Ladies College",
+    "MLC",
+    "Penrhos College",
+    "Rossmoyne",
+    "St Mary's",
     "The Rise",
     "UWA Rec. Centre",
     "Wesley College"
 ]
 
-div_list = ["80", "81", "82", "83", "94", "95", "96", "97", "98", "99", "100", "101"]
+wavl_div_list = ["80", "81", "82", "83", "94", "95", "96", "97", "98", "99", "100", "101"]
+
+jl_div_list = ['84', '85', '86', '87', '88', '89', '90', '91', '92']
 
 div_dict = {
     '80': ['State League Women', 'SL Women'],
     '81': ['State League Men', 'SL Men'],
     '82': ['State League Reserve Men', 'SLR Men'],
     '83': ['State League Reserve Women', 'SLR Women'],
+    '84': ['7/8 Female Pool 1', '7/8 F 1'],
+    '85': ['7/8 Female Pool 2', '7/8 F 2'],
+    '86': ['9/10 Female Pool 1', '9/10 F 1'],
+    '87': ['9/10 Female Pool 2', '9/10 F 2'],
+    '88': ['11/12 Female', '11/12 F'],
+    '89': ['11/12 Male', '11/12 M'],
+    '90': ['9/10 Male Pool 1', '9/10 M 1'],
+    '91': ['9/10 Male Pool 2', '9/10 M 2'],
+    '92': ['7/8 Male', '7/8 M'],
     '94': ['Division 1 Men', 'Div 1 M'],
     '95': ['Division 1 Women', 'Div 1 Women'],
     '96': ['Division 2 Men', 'Div 2 Men'],
@@ -102,10 +125,9 @@ div_dict = {
     '101': ['Division 5 Men', 'Div 5 Men']
 }
 
-APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+wavl_pdf_default = APP_ROOT + "\\Scoresheets\\def.pdf"
 
-pdf_default = APP_ROOT + "\\WAVL Scoresheets\\def.pdf"
-
+jl_pdf_default = APP_ROOT + "\\Scoresheets\\def_jl.pdf"
 
 '''def fill_pdf(input_pdf_path, token, data_dict, default_pdf_path, APP_ROOT):
     ANNOT_KEY = '/Annots'
@@ -183,7 +205,7 @@ def merge_pdfs(paths, output):
 
 
 
-def get_overlay_canvas(fixture) -> io.BytesIO:
+def get_overlay_canvas_wavl(fixture) -> io.BytesIO:
     data = io.BytesIO()
     pdf = canvas.Canvas(data)
     pdf.setPageSize(landscape(A4))
@@ -198,7 +220,7 @@ def get_overlay_canvas(fixture) -> io.BytesIO:
     pdf.drawCentredString(x=610, y=557, text=str(int(fixture.date_mm)))
     pdf.drawString(x=625, y=557, text=fixture.date_yyyy)
     pdf.setFont('Helvetica', 13)
-    pdf.drawCentredString(x=773, y=557, text=fixture.division)
+    pdf.drawCentredString(x=773, y=557, text=fixture.division[1])
     pdf.setFont('Helvetica', 14)
     pdf.drawCentredString(x=710, y=528, text=fixture.duty)
 
@@ -215,6 +237,35 @@ def get_overlay_canvas(fixture) -> io.BytesIO:
     else:
         pdf.setFont('Helvetica', 14)
         pdf.drawCentredString(x=460, y=527, text=fixture.team_b)
+
+    pdf.save()
+    data.seek(0)
+    return data
+
+def get_overlay_canvas_jl(fixture) -> io.BytesIO:
+    data = io.BytesIO()
+    pdf = canvas.Canvas(data)
+    pdf.setPageSize(landscape(A4))
+    pdf.setFont('Helvetica', 13)
+    pdf.drawCentredString(x=180, y=504, text=fixture.venue_full)
+    pdf.drawCentredString(x=562, y=504, text=fixture.court)
+    pdf.drawString(x=442, y=504, text=str(int(fixture.time_hr)) + ":" + fixture.time_min)
+    pdf.drawString(x=315, y=504, text=fixture.date_dd+"/"+str(int(fixture.date_mm))+"/"+fixture.date_yyyy)
+    pdf.drawCentredString(x=720, y=504, text=fixture.division[0])
+
+    if len(fixture.team_a) > 25:
+        pdf.setFont('Helvetica', 10)
+        pdf.drawCentredString(x=225, y=472, text=fixture.team_a)
+    else:
+        pdf.setFont('Helvetica', 14)
+        pdf.drawCentredString(x=225, y=472, text=fixture.team_a)
+
+    if len(fixture.team_b) > 25:
+        pdf.setFont('Helvetica', 10)
+        pdf.drawCentredString(x=655, y=472, text=fixture.team_b)
+    else:
+        pdf.setFont('Helvetica', 14)
+        pdf.drawCentredString(x=655, y=472, text=fixture.team_b)
 
     pdf.save()
     data.seek(0)
