@@ -7,29 +7,63 @@ import readPDF
 from flask import Flask, render_template, request, send_from_directory, Response
 from flask import Flask, render_template, session, request, redirect, url_for
 from flask import send_file
+import jinja2
 
 app = Flask(__name__)
 
 
-@app.route("/WAVL")
+@app.route("/")
 def home():
-    return render_template("home.html")
+    items = []
+    venues = definitions.venues_list
+    wavl = definitions.wavl_div_list
+    wavjl = definitions.jl_div_list
+
+    for i in range(max(len(venues), len(wavl), len(wavjl))):
+        venue_id = "venue_" + str(i)
+        wavl_id = "wavl_" + str(i)
+        wavjl_id = "wavjl_" + str(i)
+
+        try:
+            venue_name = venues[i]
+            venue_exists = True
+        except:
+            venue_name = ""
+            venue_exists = False
+        try:
+            wavl_name = definitions.div_dict[wavl[i]][0]
+            wavl_exists = True
+        except:
+            wavl_name = ""
+            wavl_exists = False
+        try:
+            wavjl_name = definitions.div_dict[wavjl[i]][0]
+            wavjl_exists = True
+        except:
+            wavjl_name = ""
+            wavjl_exists = False
+
+        venue_dict = dict(id=venue_id, name=venue_name, exists=venue_exists)
+        wavl_dict = dict(id=wavl_id, name=wavl_name, exists=wavl_exists)
+        wavjl_dict = dict(id=wavjl_id, name=wavjl_name, exists=wavjl_exists)
+
+        item = dict(wavl=wavl_dict, venue=venue_dict, wavjl=wavjl_dict)
+
+        items.append(item)
+
+    return render_template("vwa-export.html", items=items)
 
 
 @app.route("/WAVL/PUT", methods=["PUT", "POST"])
 def WAVL():
     venue_str = request.headers.get("VENUES")
-    div_str = request.headers.get("DIVISIONS")
+    wavl_str = request.headers.get("WAVL")
+    wavjl_str = request.headers.get("WAVjL")
     date = request.headers.get("yyyymmdd") # yyyy-mm-dd
 
-    # TODO: Add Venues
-    #venue_usage = [definitions.venues_list[i] for i in range(len(definitions.venues_list)) if venue_str[i] == "1"]
-    #league_usage = [definitions.wavl_div_list[i] for i in range(len(definitions.wavl_div_list)) if div_str[i] == "1"]
-
-    date = "2021-05-21"
-    league_usage = definitions.jl_div_list
-    #venue_usage = definitions.venues_list
-    venue_usage=["The Rise"]
+    venue_usage = [definitions.venues_list[i] for i in range(len(definitions.venues_list)) if venue_str[i] == "1"]
+    wavl_usage = [definitions.wavl_div_list[i] for i in range(len(definitions.wavl_div_list)) if wavl_str[i] == "1"]
+    wavjl_usage = [definitions.jl_div_list[i] for i in range(len(definitions.jl_div_list)) if wavjl_str[i] == "1"]
 
     # token generation
     token = ''.join(random.choice(string.ascii_letters) for i in range(12))
@@ -37,10 +71,13 @@ def WAVL():
         token = ''.join(random.choice(string.ascii_letters) for i in range(12))
     os.mkdir(definitions.APP_ROOT + "\\Scoresheets\\temp\\" + token)
 
-    fixtures = readPDF.get_fixtures(venue_usage, league_usage, date)
+    wavl_fixtures = readPDF.get_fixtures(venue_usage, wavl_usage, date)
+    wavjl_fixtures = readPDF.get_fixtures(venue_usage, wavjl_usage, date)
 
-    files = readPDF.jl_pdf(fixtures, token, list())
+    wavl_files = readPDF.full_pdf(wavl_fixtures, token, list())
+    wavjl_files = readPDF.jl_pdf(wavjl_fixtures, token, list())
 
+    files = wavl_files + wavjl_files
     readPDF.generate_output(files, token)
 
     return token
@@ -49,88 +86,16 @@ def WAVL():
 @app.route("/WAVL/download/<token>", methods=["GET"])
 def WAVL_download(token):
     token2 = request.headers.get("TOKEN")
-    print(token2)
-    print(definitions.APP_ROOT)
-    print(token)
-    return send_file(definitions.APP_ROOT + "\\output\\" + token + ".pdf")
-
-
-
-#token = ''.join(random.choice(string.ascii_letters) for i in range(12))
-#while os.path.exists(definitions.APP_ROOT + "\\WAVL Scoresheets\\temp\\" + token):
-#    token = ''.join(random.choice(string.ascii_letters) for i in range(12))
-#
-#os.mkdir(definitions.APP_ROOT + "\\WAVL Scoresheets\\temp\\" + token)
-'''
-_date = "2021-05-16"
-# leagues = ["83"]
-leagues = ["80", "81", "82", "83", "94", "95", "96", "97", "98", "99", "100", "101"]
-head = 'https://vwa.bracketpal.com/dailyform/'
-fixtures = list()
-
-for i in leagues:
-    url = head + str(i) + "/" + _date
-    table_MN = pd.read_html(url)
-    try:
-        df = table_MN[2]
-        for index, row in df.iterrows():
-            if row[0] != "Time" and type(row[1]) != type(0.01):
-                venue = row[1].split(" Ct")[0].replace(" Ct", "")
-                court = row[1].split("Ct")[1]
-                team_a = row[2]
-                team_b = row[5]
-                try:
-                    duty = row[7][5:]
-                except TypeError:
-                    duty = " "
-                division = definitions.div_dict[url.split('/')[-2]][1]
-                date = url.split('/')[-1].split('-')
-                date_dd = date[2]
-                date_mm = date[1]
-                date_yyyy = date[0]
-                time = row[0].split(':')
-                time_hr = time[0].zfill(2)
-                time_min = time[1]
-
-                tmp_venue = definitions.venues_dict[venue.lower()].split("*")
-                venue_0 = tmp_venue[0]
-                venue_1 = tmp_venue[1]
-                venue_2 = tmp_venue[2]
-
-                fixture = definitions.Fixture(venue, venue_0, venue_1, venue_2, court, team_a, team_b, duty, division,
-                                              date_dd, date_mm, date_yyyy, time_hr, time_min)
-                fixtures.append(fixture)
-    except IndexError:
-        pass
-
-
-
-wavl_pdf_default = definitions.APP_ROOT + "\\WAVL Scoresheets\\def.pdf"
-
-files = []
-for i in fixtures:
-    file_out = definitions.APP_ROOT + "\\WAVL Scoresheets\\temp\\" + token + "\\" + i.venue + "-" + i.court + "-" + i.time_hr + i.time_min + ".pdf"
-    canvas_data = definitions.get_overlay_canvas(i)
-    form = definitions.merge(canvas_data, template_path=wavl_pdf_default)
-    definitions.save(form, filename=file_out)
-    files.append(file_out)
-
-output = definitions.APP_ROOT + "\\WAVL Scoresheets\\output\\" + token + ".pdf"
-files.sort()
-definitions.merge_pdfs(files, output)
-'''
-# df.info()
-# df[0].astype('string')
-# df.head()
-# df.info()
-# print(x.text)
-
-# table = etree.HTML(x.text).findall("body/table")
-# first_table = table[0]
-# table_as_list = list(first_table)
-# table_headers = [col.text for col in table_as_list[0]]
-# table_list_dict = [dict(zip(table_headers, [col.text for col in row])) for row in table_as_list[1:]]
-# [print(dictionary) for dictionary in table_list_dict]
+    #print(token2)
+    #print(definitions.APP_ROOT)
+    #print(token)
+    result = send_file(definitions.APP_ROOT + "\\output\\" + token + ".pdf",
+                       mimetype="application/pdf",
+                       as_attachment=True,
+                       conditional=False,
+                       attachment_filename="Scoresheets.pdf")
+    result.headers["x-suggested-filename"] = "Scoresheets.pdf"
+    return result
 
 
 if __name__ == "__main__":

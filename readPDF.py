@@ -5,12 +5,10 @@ import definitions
 def get_fixtures(venues, league, date):
     head = 'https://vwa.bracketpal.com/dailyform/'
     fixtures = list()
+    if "Methodist Ladies College" in venues:
+        venues.append("MLC")
     for i in league:
-        #print(head)
-        #print(i)
-        #print(date)
         url = head + str(i) + "/" + str(date)
-        #print(url)
         table_MN = pd.read_html(url)
         try:
             df = table_MN[2]
@@ -40,8 +38,9 @@ def get_fixtures(venues, league, date):
                         venue_2 = tmp_venue[2]
                         venue_full = " ".join(tmp_venue)
 
-                        fixture = definitions.Fixture(venue, venue_0, venue_1, venue_2, venue_full, court, team_a, team_b, duty,
-                                                      division, date_dd, date_mm, date_yyyy, time_hr, time_min)
+                        fixture = definitions.Fixture(venue, venue_0, venue_1, venue_2, venue_full, court, team_a,
+                                                      team_b, duty, division, date_dd, date_mm, date_yyyy, time_hr,
+                                                      time_min)
                         fixtures.append(fixture)
                     else:
                         print(venue)
@@ -51,9 +50,10 @@ def get_fixtures(venues, league, date):
     return fixtures
 
 
-def full_pdf(fixtures, token, files=list()):
+def full_pdf(fixtures, token, files):
     for fixture in fixtures:
-        file_out = definitions.APP_ROOT + "\\Scoresheets\\temp\\" + token + "\\" + fixture.venue + "-" + fixture.court + "-" + fixture.time_hr + fixture.time_min + ".pdf"
+        file_out = definitions.APP_ROOT + "\\Scoresheets\\temp\\" + token + "\\" + fixture.venue + "-" \
+                   + fixture.court + "-" + fixture.time_hr + fixture.time_min + ".pdf"
         canvas_data = definitions.get_overlay_canvas_wavl(fixture)
         form = definitions.merge(canvas_data, template_path=definitions.wavl_pdf_default)
         definitions.save(form, filename=file_out)
@@ -63,7 +63,8 @@ def full_pdf(fixtures, token, files=list()):
 
 def jl_pdf(fixtures, token, files):
     for fixture in fixtures:
-        file_out = definitions.APP_ROOT + "\\Scoresheets\\temp\\" + token + "\\" + fixture.venue + "-" + fixture.court + "-" + fixture.time_hr + fixture.time_min + ".pdf"
+        file_out = definitions.APP_ROOT + "\\Scoresheets\\temp\\" + token + "\\" + fixture.venue + "-" \
+                   + fixture.court + "-" + fixture.time_hr + fixture.time_min + ".pdf"
         canvas_data = definitions.get_overlay_canvas_jl(fixture)
         form = definitions.merge(canvas_data, template_path=definitions.jl_pdf_default)
         definitions.save(form, filename=file_out)

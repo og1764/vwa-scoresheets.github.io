@@ -8,7 +8,8 @@ from reportlab.lib.pagesizes import A4, landscape
 
 
 class Fixture:
-    def __init__(self, venue, venue_0, venue_1, venue_2, venue_full, court, team_a, team_b, duty, division, date_dd, date_mm, date_yyyy, time_hr, time_min):
+    def __init__(self, venue, venue_0, venue_1, venue_2, venue_full, court, team_a, team_b, duty, division, date_dd,
+                 date_mm, date_yyyy, time_hr, time_min):
         self.venue = venue
         self.venue_2 = venue_2
         self.venue_1 = venue_1
@@ -27,7 +28,9 @@ class Fixture:
         pass
 
     def prnt(self):
-        print("Venue: %s, Court: %s, A: %s, B: %s, Duty: %s, Division: %s, Date: %s/%s/%s, Time: %s:%s" % (self.venue, self.court, self.team_a, self.team_b, self.duty, self.division, self.date_dd, self.date_mm, self.date_yyyy, self.time_hr, self.time_min))
+        print("Venue: %s, Court: %s, A: %s, B: %s, Duty: %s, Division: %s, Date: %s/%s/%s, Time: %s:%s" %
+              (self.venue, self.court, self.team_a, self.team_b, self.duty, self.division, self.date_dd, self.date_mm,
+               self.date_yyyy, self.time_hr, self.time_min))
         pass
 
     def get_dict(self):
@@ -49,7 +52,8 @@ class Fixture:
             "time_min": self.time_min
                 }
 
-APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+#class Row:
+#    def __init__(self, venue, wavl, wavjl):
 
 venues_dict = {
     "aquinas college": "*Aquinas*College",
@@ -88,7 +92,6 @@ venues_list = [
     "MBC",
     "Melville LeisureFit",
     "Methodist Ladies College",
-    "MLC",
     "Penrhos College",
     "Rossmoyne",
     "St Mary's",
@@ -125,57 +128,9 @@ div_dict = {
     '101': ['Division 5 Men', 'Div 5 Men']
 }
 
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 wavl_pdf_default = APP_ROOT + "\\Scoresheets\\def.pdf"
-
 jl_pdf_default = APP_ROOT + "\\Scoresheets\\def_jl.pdf"
-
-'''def fill_pdf(input_pdf_path, token, data_dict, default_pdf_path, APP_ROOT):
-    ANNOT_KEY = '/Annots'
-    ANNOT_FIELD_KEY = '/T'
-    SUBTYPE_KEY = '/Subtype'
-    WIDGET_SUBTYPE_KEY = '/Widget'
-
-    ven = data_dict["venue"].lower() + ".pdf"
-    print(ven)
-    print(data_dict.keys())
-    end_venue = data_dict["venue"]
-    try:
-        file = str(input_pdf_path + ven)
-        print(file)
-        template_pdf = pdfrw.PdfReader(file)
-        data_dict.pop("venue")
-    except IndexError:
-        template_pdf = pdfrw.PdfReader(default_pdf_path)
-        print("hehexd")
-    template_pdf.Root.AcroForm.update(pdfrw.PdfDict(NeedAppearances=pdfrw.PdfObject('true')))  # NEW
-    for page in template_pdf.pages:
-        annotations = page[ANNOT_KEY]
-        try:
-            for annotation in annotations:
-                if annotation[SUBTYPE_KEY] == WIDGET_SUBTYPE_KEY:
-                    if annotation[ANNOT_FIELD_KEY]:
-                        key = annotation[ANNOT_FIELD_KEY][1:-1]
-                        if key in data_dict.keys():
-                            if type(data_dict[key]) == bool:
-                                if data_dict[key]:
-                                    annotation.update(pdfrw.PdfDict(
-                                        AS=pdfrw.PdfName('Yes')))
-                                    annotation.update(pdfrw.PdfDict(Ff=1))
-                            else:
-                                annotation.update(
-                                    pdfrw.PdfDict(V='{}'.format(data_dict[key]))
-                                )
-                                annotation.update(pdfrw.PdfDict(Ff=1))
-                                annotation.update(pdfrw.PdfDict(AP=''))
-
-        except TypeError:
-            pass
-    filename = APP_ROOT + "\\WAVL Scoresheets\\temp\\" + token + "\\" + end_venue + "-" + data_dict["court"] +\
-               "-" + data_dict["time_hr"] + data_dict["time_min"] + ".pdf"
-    pdfrw.PdfWriter().write(filename, template_pdf)
-    print(filename)
-    return filename
-'''
 
 
 def merge_pdfs(paths, output):
@@ -188,21 +143,6 @@ def merge_pdfs(paths, output):
     # Write out the merged PDF
     with open(output, 'wb') as out:
         pdf_writer.write(out)
-
-#venue_0 = (x=282, y=573)
-#venue_1 = (x=282, y=565)
-#venue_2 = (x=282, y=557)
-#court = (x=400, y=557)
-#time_hr = (x=480, y=557)
-#time_min = (x=500, y=557)
-#date_dd = (x=580, y=557)
-#date_mm = (x=605, y=557)
-#date_yyyy = (x=625, y=557)
-#duty = (x=615, y=528)
-#team_a = (x=255, y=527)
-#team_b = (x=400, y=527)
-
-
 
 
 def get_overlay_canvas_wavl(fixture) -> io.BytesIO:
@@ -224,23 +164,19 @@ def get_overlay_canvas_wavl(fixture) -> io.BytesIO:
     pdf.setFont('Helvetica', 14)
     pdf.drawCentredString(x=710, y=528, text=fixture.duty)
 
-    if len(fixture.team_a) > 18:
+    if len(fixture.team_a) > 18 or len(fixture.team_b) > 18:
         pdf.setFont('Helvetica', 10)
         pdf.drawCentredString(x=320, y=527, text=fixture.team_a)
-    else:
-        pdf.setFont('Helvetica', 14)
-        pdf.drawCentredString(x=320, y=527, text=fixture.team_a)
-
-    if len(fixture.team_b) > 18:
-        pdf.setFont('Helvetica', 10)
         pdf.drawCentredString(x=460, y=527, text=fixture.team_b)
     else:
         pdf.setFont('Helvetica', 14)
+        pdf.drawCentredString(x=320, y=527, text=fixture.team_a)
         pdf.drawCentredString(x=460, y=527, text=fixture.team_b)
 
     pdf.save()
     data.seek(0)
     return data
+
 
 def get_overlay_canvas_jl(fixture) -> io.BytesIO:
     data = io.BytesIO()
@@ -250,21 +186,16 @@ def get_overlay_canvas_jl(fixture) -> io.BytesIO:
     pdf.drawCentredString(x=180, y=504, text=fixture.venue_full)
     pdf.drawCentredString(x=562, y=504, text=fixture.court)
     pdf.drawString(x=442, y=504, text=str(int(fixture.time_hr)) + ":" + fixture.time_min)
-    pdf.drawString(x=315, y=504, text=fixture.date_dd+"/"+str(int(fixture.date_mm))+"/"+fixture.date_yyyy)
+    pdf.drawString(x=315, y=504, text=fixture.date_dd + "/" + str(int(fixture.date_mm)) + "/" + fixture.date_yyyy)
     pdf.drawCentredString(x=720, y=504, text=fixture.division[0])
 
-    if len(fixture.team_a) > 25:
+    if len(fixture.team_a) > 25 or len(fixture.team_b) > 25:
         pdf.setFont('Helvetica', 10)
         pdf.drawCentredString(x=225, y=472, text=fixture.team_a)
-    else:
-        pdf.setFont('Helvetica', 14)
-        pdf.drawCentredString(x=225, y=472, text=fixture.team_a)
-
-    if len(fixture.team_b) > 25:
-        pdf.setFont('Helvetica', 10)
         pdf.drawCentredString(x=655, y=472, text=fixture.team_b)
     else:
         pdf.setFont('Helvetica', 14)
+        pdf.drawCentredString(x=225, y=472, text=fixture.team_a)
         pdf.drawCentredString(x=655, y=472, text=fixture.team_b)
 
     pdf.save()

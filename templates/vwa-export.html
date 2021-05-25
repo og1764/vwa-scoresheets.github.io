@@ -1,0 +1,180 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Untitled Page</title>
+        <meta name="generator" content="WYSIWYG Web Builder 16 Trial Version - https://www.wysiwygwebbuilder.com">
+        <link href="../static/base/jquery-ui.min.css" rel="stylesheet">
+        <link href="../static/Untitled1.css" rel="stylesheet">
+        <link href="../static/page1.css" rel="stylesheet">
+        <script src="../static/jquery-1.12.4.min.js"></script>
+        <script src="../static/jquery-ui.min.js"></script>
+        <script src="../static/WAVL.js"></script>
+        <script>
+            function nextSunday(){
+                var d = new Date()
+                d.setDate(d.getDate() + (0+(7-d.getDay())) % 7);
+                console.log(d)
+                return d;
+            }
+            $(document).ready(function()
+            {
+               $("#DatePicker2").datepicker(
+               {
+                  dateFormat: 'yy-mm-dd',
+                  changeMonth: false,
+                  changeYear: false,
+                  showButtonPanel: false,
+                  showAnim: 'show'
+               });
+               $("#DatePicker2").datepicker("setDate", nextSunday());
+               $("#DatePicker2").change(function()
+               {
+                  $('#DatePicker2-input').attr('value',$(this).val());
+               });
+            });
+        </script>
+    </head>
+    <body>
+        <div id="container">
+            <a href="https://www.wysiwygwebbuilder.com" target="_blank"><img src="../static/images/builtwithwwb16.png" alt="WYSIWYG Web Builder" style="position:absolute;left:254px;top:230px;margin: 0;border-width:0;z-index:250"></a>
+            <div id="wb_Form2" style="position:absolute;left:53px;top:144px;width:865px;height:1072px;z-index:276;">
+                <form name="WAVL_Advanced" id="Form2">
+                    <input type="button" id="Button4" name="Generate Scoresheets" value="Generate Scoresheets" style="position:absolute;left:436px;top:77px;width:223px;height:25px;z-index:89;" onclick="WAVL_MAIN()">
+                    <input id="DatePicker2-input" name="DatePicker2" style="display:none" type="text" value="">
+                    <div id="DatePicker2" style="position:absolute;left:69px;top:17px;width:222px;height:213px;z-index:90;"></div>
+                    <input type="button" id="Button1" name="Download Scoresheets" value="Download Scoresheets" style="position:absolute;left:436px;top:146px;width:223px;height:25px;z-index:91;" disabled="">
+                    <!--<button id="Button10" style="position:absolute;left:436px;top:146px;width:223px;height:25px;z-index:91;" onclick="console.log('wtf')">Download</button>
+                    --><div id="wb_Text1" style="position:absolute;left:315px;top:17px;width:464px;height:20px;text-align:center;z-index:92;">
+                        <span style="color:#000000;font-family:Arial;font-size:27px;"><strong>Volleyball WA Scoresheet Generator</strong></span>
+                    </div>
+                    <table style="position:absolute;left:3px;top:233px;width:858px;height:811px;z-index:93;" id="Table1">
+                        <tr>
+                            <td colspan="4" class="cell0">
+                                <div id="wb_Text2">
+                                    <span style="color:#000000;font-family:Arial;font-size:29px;">Venues</span>
+                                </div>
+                            </td>
+                            <td colspan="3" class="cell0">
+                                <div id="wb_Text3">
+                                    <span style="color:#000000;font-family:Arial;font-size:29px;">WAVL</span>
+                                </div>
+                            </td>
+                            <td colspan="3" class="cell0">
+                                <div id="wb_Text36">
+                                    <span style="color:#000000;font-family:Arial;font-size:29px;">WAVjL</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                        <td class="cell1"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        <td class="cell2"><div id="wb_Checkbox32" style="display:inline-block;width:16px;height:20px;z-index:3;">
+                        <input type="checkbox" id="Checkbox32" name="ALL_VENUES" value="on" checked="" style="display:inline-block;" title="Toggle All Venues" onclick="deselect_all_venue()"><label for="Checkbox32"></label>
+                        </div>
+                        </td>
+                        <td class="cell3"><div id="wb_Text35">
+                        <span style="color:#000000;font-family:Arial;font-size:19px;"><strong>Toggle All Venues</strong></span>
+                        </div>
+                        </td>
+                        <td class="cell4"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        <td class="cell2"><div id="wb_Checkbox33" style="display:inline-block;width:16px;height:20px;z-index:5;">
+                        <input type="checkbox" id="Checkbox33" name="ALL_WAVL" value="on" checked="" style="display:inline-block;" title="Toggle All WAVL Teams" onclick="deselect_all_wavl()"><label for="Checkbox33"></label>
+                        </div>
+                        </td>
+                        <td class="cell3"><div id="wb_Text37">
+                        <span style="color:#000000;font-family:Arial;font-size:19px;"><strong>Toggle All WAVL Teams</strong></span>
+                        </div>
+                        </td>
+                        <td class="cell4"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        <td class="cell2"><div id="wb_Checkbox34" style="display:inline-block;width:16px;height:20px;z-index:7;">
+                        <input type="checkbox" id="Checkbox34" name="ALL_WAVJL" value="on" checked="" style="display:inline-block;" title="Toggle All WAVjL Teams" onclick="deselect_all_wavjl()"><label for="Checkbox34"></label>
+                        </div>
+                        </td>
+                        <td colspan="2" class="cell5"><div id="wb_Text40">
+                        <span style="color:#000000;font-family:Arial;font-size:19px;"><strong>Toggle All WAVjL Teams</strong></span>
+                        </div>
+                        </td>
+                        </tr>
+                        <tr>
+                        <td class="cell6"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        <td class="cell7"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        <td class="cell8"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        <td class="cell9"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        <td class="cell7"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        <td class="cell8"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        <td class="cell9"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        <td class="cell7"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        <td class="cell8"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        <td class="cell9"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        </tr>
+                        {% for item in items %}
+                        <tr>
+                            <td class="cell1"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                            {% if item.venue.exists -%}
+                            <td class="cell2">
+                                <div id="{{ item.venue.id }}" style="display:inline-block;width:16px;height:20px;z-index:56;">
+                                    <input type="checkbox" id="Checkbox12" name="Venues" value="on" checked="" style="display:inline-block;" title="{{ item.venue.name }}">
+                                </div>
+                            </td>
+                            <td class="cell9">
+                                <div id="wb_Text8">
+                                <span style="color:#000000;font-family:Arial;font-size:16px;">{{ item.venue.name }}</span>
+                                </div>
+                            </td>
+                            {% else -%}
+                            <td class="cell10"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                            <td class="cell11"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                            {% endif %}
+                            <td class="cell1"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                            {% if item.wavl.exists -%}
+                            <td class="cell2">
+                                <div id="{{ item.wavl.id }}" style="display:inline-block;width:16px;height:20px;z-index:58;">
+                                    <input type="checkbox" id="Checkbox28" name="WAVL_teams" value="on" checked="" style="display:inline-block;" title="{{ item.wavl.name }}">
+                                </div>
+                            </td>
+                            <td class="cell9">
+                                <div id="wb_Text32">
+                                <span style="color:#000000;font-family:Arial;font-size:16px;">{{ item.wavl.name }}</span>
+                            </div>
+                            </td>
+                            {% else -%}
+                            <td class="cell10"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                            <td class="cell11"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                            {% endif %}
+                            <td class="cell1"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                            {% if item.wavjl.exists -%}
+                            <td class="cell2">
+                                <div id="{{ item.wavjl.id }}" style="display:inline-block;width:16px;height:20px;z-index:60;">
+                                    <input type="checkbox" id="Checkbox43" name="WAVjL_teams" value="on" checked="" style="display:inline-block;" title="{{ item.wavjl.name }}">
+                                </div>
+                            </td>
+                            <td class="cell9"><div id="wb_Text49">
+                                <span style="color:#000000;font-family:Arial;font-size:16px;">{{ item.wavjl.name }}</span>
+                                </div>
+                            </td>
+                            {% else -%}
+                            <td class="cell10"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                            <td class="cell11"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                            {% endif %}
+                            <td class="cell1"><p style="font-size:8px;line-height:9.5px;">&nbsp;</p></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <div id="wb_Line2" style="position:absolute;left:293px;top:229px;width:2px;height:831px;z-index:94;">
+                        <img src="../static/images/img0002.png" id="Line2" alt="">
+                    </div>
+                    <hr id="Line1" style="position:absolute;left:1px;top:216px;width:864px;z-index:95;">
+                    <div id="wb_Line3" style="position:absolute;left:576px;top:228px;width:2px;height:834px;z-index:96;">
+                        <img src="../static/images/img0003.png" id="Line3" alt="">
+                    </div>
+                </form>
+            </div>
+            <div id="wb_Image1" style="position:absolute;left:124px;top:1px;width:723px;height:110px;z-index:277;">
+                <img src="../static/images/logo.jpg" id="Image1" alt="">
+            </div>
+            <div id="wb_ClipArt1" style="position:absolute;left:0px;top:1px;width:50px;height:50px;z-index:278;">
+                <img src="../static/images/img0001.png" id="ClipArt1" alt="" style="width:50px;height:50px;">
+            </div>
+        </div>
+    </body>
+</html>

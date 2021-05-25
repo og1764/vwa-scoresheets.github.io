@@ -2,6 +2,15 @@
 81,State League Men,SL Men
 82,State League Reserve Men,SLR Men
 83,State League Reserve Women,SLR Women
+84,7 / 8 Female Pool 1,7/8 F 1
+85,7 / 8 Female Pool 2,7/8 F 2
+86,9 / 10 Female Pool 1,9/10 F 1
+87,9 / 10 Female Pool 2,9/10 F 2
+88,11 / 12 Female,11/12 F
+89,11 / 12 Male,11/12 M
+90,9 / 10 Male Pool 1,9/10 M 1
+91,9 / 10 Male Pool 2,9/10 M 2
+92,7 / 8 Male,7/8 M
 94,Division 1 Men,Div 1 M
 95,Division 1 Women,Div 1 Women
 96,Division 2 Men,Div 2 Men
