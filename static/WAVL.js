@@ -12,6 +12,8 @@ function WAVL_MAIN(){
         }else{
             venues = venues + "0";
         }
+        console.log(document.getElementById(checkbox.id).title);
+
     });
     document.getElementsByName("WAVL_teams").forEach((checkbox) => {
         if(document.getElementById(checkbox.id).checked){

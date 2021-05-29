@@ -19,7 +19,9 @@ body
    line-height: 1.1875;
    margin: 0;
    text-align: center;
+   padding-bottom: 300px;
 }
+
 a
 {
    color: #0000FF;

@@ -153,14 +153,14 @@ def get_overlay_canvas_wavl(fixture) -> io.BytesIO:
     pdf.drawCentredString(x=310, y=575, text=fixture.venue_0)
     pdf.drawCentredString(x=310, y=566, text=fixture.venue_1)
     pdf.drawCentredString(x=310, y=557, text=fixture.venue_2)
+    pdf.setFont('Helvetica-Bold', 13)
     pdf.drawCentredString(x=400, y=557, text=fixture.court)
-    pdf.drawString(x=480, y=557, text=str(int(fixture.time_hr)))
+    pdf.drawRightString(x=492, y=557, text=str(int(fixture.time_hr)))
     pdf.drawString(x=500, y=557, text=fixture.time_min)
-    pdf.drawString(x=583, y=557, text=fixture.date_dd)
+    pdf.drawRightString(x=596, y=557, text=str(int(fixture.date_dd)))
     pdf.drawCentredString(x=610, y=557, text=str(int(fixture.date_mm)))
-    pdf.drawString(x=625, y=557, text=fixture.date_yyyy)
-    pdf.setFont('Helvetica', 13)
-    pdf.drawCentredString(x=773, y=557, text=fixture.division[1])
+    pdf.drawString(x=625, y=557, text=fixture.date_yyyy[2:4])
+    pdf.drawCentredString(x=773, y=557.5, text=fixture.division[1])
     pdf.setFont('Helvetica', 14)
     pdf.drawCentredString(x=710, y=528, text=fixture.duty)
 
@@ -191,12 +191,12 @@ def get_overlay_canvas_jl(fixture) -> io.BytesIO:
 
     if len(fixture.team_a) > 25 or len(fixture.team_b) > 25:
         pdf.setFont('Helvetica', 10)
-        pdf.drawCentredString(x=225, y=472, text=fixture.team_a)
-        pdf.drawCentredString(x=655, y=472, text=fixture.team_b)
+        pdf.drawCentredString(x=250, y=472, text=fixture.team_a)
+        pdf.drawCentredString(x=660, y=472, text=fixture.team_b)
     else:
         pdf.setFont('Helvetica', 14)
-        pdf.drawCentredString(x=225, y=472, text=fixture.team_a)
-        pdf.drawCentredString(x=655, y=472, text=fixture.team_b)
+        pdf.drawCentredString(x=250, y=472, text=fixture.team_a)
+        pdf.drawCentredString(x=660, y=472, text=fixture.team_b)
 
     pdf.save()
     data.seek(0)

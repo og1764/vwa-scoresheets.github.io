@@ -7,7 +7,9 @@ def get_fixtures(venues, league, date):
     fixtures = list()
     if "Methodist Ladies College" in venues:
         venues.append("MLC")
+    print(venues)
     for i in league:
+        print("---------")
         url = head + str(i) + "/" + str(date)
         table_MN = pd.read_html(url)
         try:
@@ -15,6 +17,7 @@ def get_fixtures(venues, league, date):
             for index, row in df.iterrows():
                 if row[0] != "Time" and type(row[1]) != type(0.01):
                     venue = row[1].split(" Ct")[0].replace(" Ct", "")
+                    print(venue)
                     if venue in venues:
                         court = row[1].split("Ct")[1]
                         team_a = row[2]

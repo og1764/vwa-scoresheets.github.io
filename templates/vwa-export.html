@@ -38,7 +38,7 @@
     <body>
         <div id="container">
             <a href="https://www.wysiwygwebbuilder.com" target="_blank"><img src="../static/images/builtwithwwb16.png" alt="WYSIWYG Web Builder" style="position:absolute;left:254px;top:230px;margin: 0;border-width:0;z-index:250"></a>
-            <div id="wb_Form2" style="position:absolute;left:53px;top:144px;width:865px;height:1072px;z-index:276;">
+            <div id="wb_Form2" style="position:relative;left:53px;top:144px;width:865px;height:1072px;z-index:276;">
                 <form name="WAVL_Advanced" id="Form2">
                     <input type="button" id="Button4" name="Generate Scoresheets" value="Generate Scoresheets" style="position:absolute;left:436px;top:77px;width:223px;height:25px;z-index:89;" onclick="WAVL_MAIN()">
                     <input id="DatePicker2-input" name="DatePicker2" style="display:none" type="text" value="">
@@ -113,7 +113,7 @@
                             {% if item.venue.exists -%}
                             <td class="cell2">
                                 <div id="{{ item.venue.id }}" style="display:inline-block;width:16px;height:20px;z-index:56;">
-                                    <input type="checkbox" id="Checkbox12" name="Venues" value="on" checked="" style="display:inline-block;" title="{{ item.venue.name }}">
+                                    <input type="checkbox" id="{{ item.venue.chk }}" name="Venues" value="on" checked="" style="display:inline-block;" title="{{ item.venue.name }}">
                                 </div>
                             </td>
                             <td class="cell9">
@@ -129,7 +129,7 @@
                             {% if item.wavl.exists -%}
                             <td class="cell2">
                                 <div id="{{ item.wavl.id }}" style="display:inline-block;width:16px;height:20px;z-index:58;">
-                                    <input type="checkbox" id="Checkbox28" name="WAVL_teams" value="on" checked="" style="display:inline-block;" title="{{ item.wavl.name }}">
+                                    <input type="checkbox" id="{{ item.wavl.chk }}" name="WAVL_teams" value="on" checked="" style="display:inline-block;" title="{{ item.wavl.name }}">
                                 </div>
                             </td>
                             <td class="cell9">
@@ -145,7 +145,7 @@
                             {% if item.wavjl.exists -%}
                             <td class="cell2">
                                 <div id="{{ item.wavjl.id }}" style="display:inline-block;width:16px;height:20px;z-index:60;">
-                                    <input type="checkbox" id="Checkbox43" name="WAVjL_teams" value="on" checked="" style="display:inline-block;" title="{{ item.wavjl.name }}">
+                                    <input type="checkbox" id="{{ item.wavjl.chk }}" name="WAVjL_teams" value="on" checked="" style="display:inline-block;" title="{{ item.wavjl.name }}">
                                 </div>
                             </td>
                             <td class="cell9"><div id="wb_Text49">

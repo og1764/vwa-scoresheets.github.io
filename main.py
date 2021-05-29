@@ -43,9 +43,9 @@ def home():
             wavjl_name = ""
             wavjl_exists = False
 
-        venue_dict = dict(id=venue_id, name=venue_name, exists=venue_exists)
-        wavl_dict = dict(id=wavl_id, name=wavl_name, exists=wavl_exists)
-        wavjl_dict = dict(id=wavjl_id, name=wavjl_name, exists=wavjl_exists)
+        venue_dict = dict(id=venue_id, name=venue_name, exists=venue_exists, chk="chk_"+venue_id)
+        wavl_dict = dict(id=wavl_id, name=wavl_name, exists=wavl_exists, chk="chk_"+wavl_id)
+        wavjl_dict = dict(id=wavjl_id, name=wavjl_name, exists=wavjl_exists, chk="chk_"+wavjl_id)
 
         item = dict(wavl=wavl_dict, venue=venue_dict, wavjl=wavjl_dict)
 
@@ -61,6 +61,8 @@ def WAVL():
     wavjl_str = request.headers.get("WAVjL")
     date = request.headers.get("yyyymmdd") # yyyy-mm-dd
 
+    print(venue_str)
+    print(definitions.venues_list)
     venue_usage = [definitions.venues_list[i] for i in range(len(definitions.venues_list)) if venue_str[i] == "1"]
     wavl_usage = [definitions.wavl_div_list[i] for i in range(len(definitions.wavl_div_list)) if wavl_str[i] == "1"]
     wavjl_usage = [definitions.jl_div_list[i] for i in range(len(definitions.jl_div_list)) if wavjl_str[i] == "1"]
