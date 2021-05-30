@@ -5,6 +5,353 @@ div#container
    margin: 0 auto 0 auto;
    text-align: left;
 }
+.Button4:after {
+  content: ' .';
+  animation: dots 1s steps(5, end) infinite;
+}
+
+#Checkbox99 input[type='checkbox']
+{
+   position: absolute;
+   padding: 0;
+   margin: 0;
+   opacity: 0;
+   z-index: 1;
+   width: 16px;
+   height: 16px;
+   left: 0;
+   top: 0;
+}
+
+#Checkbox99
+{
+   position: absolute;
+   padding: 0;
+   margin: 0;
+   z-index: 1;
+   width: 16px;
+   height: 16px;
+   left: 450px;
+   top: 160px;
+}
+#Checkbox99 label
+{
+   position: absolute;
+   padding: 0;
+   margin: 0;
+   z-index: 1;
+   left: 450px;
+   top: 160px;
+}
+
+#wb_Checkbox99
+{
+   margin: 0;
+}
+#wb_Checkbox99
+{
+   position: relative;
+}
+#wb_Checkbox99, #wb_Checkbox99 *, #wb_Checkbox99 *::before, #wb_Checkbox99 *::after
+{
+   box-sizing: border-box;
+}
+#wb_Checkbox99 input[type='checkbox']
+{
+   position: absolute;
+   padding: 0;
+   margin: 0;
+   opacity: 0;
+   z-index: 1;
+}
+#wb_Checkbox99 label
+{
+   display: inline-block;
+   vertical-align: middle;
+   position: absolute;
+   left: 0px;
+   top: 0;
+   width: 0;
+   height: 0;
+   padding: 0;
+}
+#wb_Checkbox99 label::before
+{
+   content: "";
+   display: inline-block;
+   position: absolute;
+   width: 16px;
+   height: 16px;
+   left: 450px;
+   top: 160px;
+   background-color: #FFFFFF;
+   border: 1px solid #CCCCCC;
+   border-radius: 4px;
+}
+#wb_Checkbox99 label::after
+{
+   display: inline-block;
+   position: absolute;
+   width: 16px;
+   height: 16px;
+   left: 450px;
+   top: 160px;
+   padding: 0;
+   text-align: center;
+   line-height: 16px;
+}
+#wb_Checkbox99 input[type='checkbox']:checked + label::after
+{
+   content: " ";
+   background: url('data:image/svg+xml,%3csvg%20height%3d%2216%22%20width%3d%2216%22%20version%3d%221.1%22%20xmlns%3d%22http://www.w3.org/2000/svg%22%3e%3cg%20style%3d%22fill:%23FFFFFF%22%20transform%3d%22scale%280.0089%29%22%3e%0d%0a%3cpath%20transform%3d%22rotate%28180%29%20scale%28%2d1%2c1%29%20translate%280%2c%2d1536%29%22%20d%3d%22M1671%20970q0%20%2d40%20%2d28%20%2d68l%2d724%20%2d724l%2d136%20%2d136q%2d28%20%2d28%20%2d68%20%2d28t%2d68%2028l%2d136%20136l%2d362%20362q%2d28%2028%20%2d28%2068t28%2068l136%20136q28%2028%2068%2028t68%20%2d28l294%20%2d295l656%20657q28%2028%2068%2028t68%20%2d28l136%20%2d136q28%20%2d28%2028%20%2d68z%22/%3e%3c/g%3e%3c/svg%3e') no-repeat center center;
+   background-size: 80% 80%
+}
+#wb_Checkbox99 input[type='checkbox']:checked + label::before
+{
+   background-color: #3370B7;
+   background-image: none;
+   border-color: #3370B7;
+}
+#wb_Checkbox99 input[type='checkbox']:focus + label::before
+{
+   outline: thin dotted;
+}
+
+
+
+#Table1 div[id^='venue']
+{
+   margin: 0;
+}
+#Table1 div[id^='venue']
+{
+   position: relative;
+}
+#Table1 div[id^='venue'], #Table1 div[id^='venue'] *, #Table1 div[id^='venue'] *::before, #Table1 div[id^='venue'] *::after
+{
+   box-sizing: border-box;
+}
+#Table1 div[id^='venue'] input[type='checkbox']
+{
+   position: absolute;
+   padding: 0;
+   margin: 0;
+   opacity: 1;
+   z-index: 1;
+}
+#Table1 div[id^='venue'] label
+{
+   display: inline-block;
+   vertical-align: middle;
+   position: absolute;
+   left: 0px;
+   top: 0;
+   width: 0;
+   height: 0;
+   padding: 0;
+}
+#Table1 div[id^='venue'] label::before
+{
+   content: "";
+   display: inline-block;
+   position: absolute;
+   width: 16px;
+   height: 16px;
+   background-color: #FFFFFF;
+   border: 1px solid #CCCCCC;
+   border-radius: 4px;
+}
+#Table1 div[id^='venue'] label::after
+{
+   display: inline-block;
+   position: absolute;
+   width: 16px;
+   height: 16px;
+   padding: 0;
+   text-align: center;
+   line-height: 16px;
+}
+#Table1 div[id^='venue'] input[type='checkbox']:checked + label::after
+{
+   content: " ";
+   background: url('data:image/svg+xml,%3csvg%20height%3d%2216%22%20width%3d%2216%22%20version%3d%221.1%22%20xmlns%3d%22http://www.w3.org/2000/svg%22%3e%3cg%20style%3d%22fill:%23FFFFFF%22%20transform%3d%22scale%280.0089%29%22%3e%0d%0a%3cpath%20transform%3d%22rotate%28180%29%20scale%28%2d1%2c1%29%20translate%280%2c%2d1536%29%22%20d%3d%22M1671%20970q0%20%2d40%20%2d28%20%2d68l%2d724%20%2d724l%2d136%20%2d136q%2d28%20%2d28%20%2d68%20%2d28t%2d68%2028l%2d136%20136l%2d362%20362q%2d28%2028%20%2d28%2068t28%2068l136%20136q28%2028%2068%2028t68%20%2d28l294%20%2d295l656%20657q28%2028%2068%2028t68%20%2d28l136%20%2d136q28%20%2d28%2028%20%2d68z%22/%3e%3c/g%3e%3c/svg%3e') no-repeat center center;
+   background-size: 80% 80%
+}
+#Table1 div[id^='venue'] input[type='checkbox']:checked + label::before
+{
+   background-color: #3370B7;
+   background-image: none;
+   border-color: #3370B7;
+}
+#Table1 div[id^='venue'] input[type='checkbox']:focus + label::before
+{
+   outline: thin dotted;
+}
+
+
+
+#Table1 div[id^='wavl']
+{
+   margin: 0;
+}
+#Table1 div[id^='wavl']
+{
+   position: relative;
+}
+#Table1 div[id^='wavl'], #Table1 div[id^='wavl'] *, #Table1 div[id^='wavl'] *::before, #Table1 div[id^='wavl'] *::after
+{
+   box-sizing: border-box;
+}
+#Table1 div[id^='wavl'] input[type='checkbox']
+{
+   position: absolute;
+   padding: 0;
+   margin: 0;
+   opacity: 1;
+   z-index: 1;
+}
+#Table1 div[id^='wavl'] label
+{
+   display: inline-block;
+   vertical-align: middle;
+   position: absolute;
+   left: 0px;
+   top: 0;
+   width: 0;
+   height: 0;
+   padding: 0;
+}
+#Table1 div[id^='wavl'] label::before
+{
+   content: "";
+   display: inline-block;
+   position: absolute;
+   width: 16px;
+   height: 16px;
+   background-color: #FFFFFF;
+   border: 1px solid #CCCCCC;
+   border-radius: 4px;
+}
+#Table1 div[id^='wavl'] label::after
+{
+   display: inline-block;
+   position: absolute;
+   width: 16px;
+   height: 16px;
+   padding: 0;
+   text-align: center;
+   line-height: 16px;
+}
+#Table1 div[id^='wavl'] input[type='checkbox']:checked + label::after
+{
+   content: " ";
+   background: url('data:image/svg+xml,%3csvg%20height%3d%2216%22%20width%3d%2216%22%20version%3d%221.1%22%20xmlns%3d%22http://www.w3.org/2000/svg%22%3e%3cg%20style%3d%22fill:%23FFFFFF%22%20transform%3d%22scale%280.0089%29%22%3e%0d%0a%3cpath%20transform%3d%22rotate%28180%29%20scale%28%2d1%2c1%29%20translate%280%2c%2d1536%29%22%20d%3d%22M1671%20970q0%20%2d40%20%2d28%20%2d68l%2d724%20%2d724l%2d136%20%2d136q%2d28%20%2d28%20%2d68%20%2d28t%2d68%2028l%2d136%20136l%2d362%20362q%2d28%2028%20%2d28%2068t28%2068l136%20136q28%2028%2068%2028t68%20%2d28l294%20%2d295l656%20657q28%2028%2068%2028t68%20%2d28l136%20%2d136q28%20%2d28%2028%20%2d68z%22/%3e%3c/g%3e%3c/svg%3e') no-repeat center center;
+   background-size: 80% 80%
+}
+#Table1 div[id^='wavl'] input[type='checkbox']:checked + label::before
+{
+   background-color: #3370B7;
+   background-image: none;
+   border-color: #3370B7;
+}
+#Table1 div[id^='wavl'] input[type='checkbox']:focus + label::before
+{
+   outline: thin dotted;
+}
+
+
+
+#Table1 div[id^='wavjl']
+{
+   margin: 0;
+}
+#Table1 div[id^='wavjl']
+{
+   position: relative;
+}
+#Table1 div[id^='wavjl'], #Table1 div[id^='wavjl'] *, #Table1 div[id^='wavjl'] *::before, #Table1 div[id^='wavjl'] *::after
+{
+   box-sizing: border-box;
+}
+#Table1 div[id^='wavjl'] input[type='checkbox']
+{
+   position: absolute;
+   padding: 0;
+   margin: 0;
+   opacity: 1;
+   z-index: 1;
+}
+#Table1 div[id^='wavjl'] label
+{
+   display: inline-block;
+   vertical-align: middle;
+   position: absolute;
+   left: 0px;
+   top: 0;
+   width: 0;
+   height: 0;
+   padding: 0;
+}
+#Table1 div[id^='wavjl'] label::before
+{
+   content: "";
+   display: inline-block;
+   position: absolute;
+   width: 16px;
+   height: 16px;
+   background-color: #FFFFFF;
+   border: 1px solid #CCCCCC;
+   border-radius: 4px;
+}
+#Table1 div[id^='wavjl'] label::after
+{
+   display: inline-block;
+   position: absolute;
+   width: 16px;
+   height: 16px;
+   padding: 0;
+   text-align: center;
+   line-height: 16px;
+}
+#Table1 div[id^='wavjl'] input[type='checkbox']:checked + label::after
+{
+   content: " ";
+   background: url('data:image/svg+xml,%3csvg%20height%3d%2216%22%20width%3d%2216%22%20version%3d%221.1%22%20xmlns%3d%22http://www.w3.org/2000/svg%22%3e%3cg%20style%3d%22fill:%23FFFFFF%22%20transform%3d%22scale%280.0089%29%22%3e%0d%0a%3cpath%20transform%3d%22rotate%28180%29%20scale%28%2d1%2c1%29%20translate%280%2c%2d1536%29%22%20d%3d%22M1671%20970q0%20%2d40%20%2d28%20%2d68l%2d724%20%2d724l%2d136%20%2d136q%2d28%20%2d28%20%2d68%20%2d28t%2d68%2028l%2d136%20136l%2d362%20362q%2d28%2028%20%2d28%2068t28%2068l136%20136q28%2028%2068%2028t68%20%2d28l294%20%2d295l656%20657q28%2028%2068%2028t68%20%2d28l136%20%2d136q28%20%2d28%2028%20%2d68z%22/%3e%3c/g%3e%3c/svg%3e') no-repeat center center;
+   background-size: 80% 80%
+}
+#Table1 div[id^='wavjl'] input[type='checkbox']:checked + label::before
+{
+   background-color: #3370B7;
+   background-image: none;
+   border-color: #3370B7;
+}
+#Table1 div[id^='wavjl'] input[type='checkbox']:focus + label::before
+{
+   outline: thin dotted;
+}
+
+
+@keyframes dots {
+  0%, 20% {
+    color: rgba(0,0,0,0);
+    text-shadow:
+      .25em 0 0 rgba(0,0,0,0),
+      .5em 0 0 rgba(0,0,0,0);}
+  40% {
+    color: white;
+    text-shadow:
+      .25em 0 0 rgba(0,0,0,0),
+      .5em 0 0 rgba(0,0,0,0);}
+  60% {
+    text-shadow:
+      .25em 0 0 white,
+      .5em 0 0 rgba(0,0,0,0);}
+  80%, 100% {
+    text-shadow:
+      .25em 0 0 white,
+      .5em 0 0 white;}}
+
+
 body
 {
    background-color: #FFFFFF;
@@ -64,6 +411,12 @@ input:focus, textarea:focus, select:focus
    background-image: none;
    border: 0px solid #CCCCCC;
 }
+#individual
+{
+   background-color: rgba(251,251,251,0.92);
+   background-image: none;
+   border: 0px solid #CCCCCC;
+}
 #Button4
 {
    border: 1px solid #2E6DA4;
@@ -74,7 +427,7 @@ input:focus, textarea:focus, select:focus
    font-family: Arial;
    font-weight: normal;
    font-style: normal;
-   font-size: 13px;
+   font-size: 20px;
    padding: 1px 6px 1px 6px;
    text-align: center;
    -webkit-appearance: none;
@@ -89,7 +442,7 @@ input:focus, textarea:focus, select:focus
 #Button4:disabled,
 #Button4[disabled]{
   border: 1px solid #999999;
-  background-color: #cccccc;
+  background-color: red;
   color: #666666;
 }
 #wb_Text2 
@@ -4413,7 +4766,7 @@ input:focus, textarea:focus, select:focus
    background-color: transparent;
    background-image: none;
    border-top-width: 0px;
-   border-right-width: 0px;
+   border-right-width: 2px;
    border-bottom-width: 1px;
    border-left-width: 0px;
    border-top-style: solid;
@@ -4421,7 +4774,7 @@ input:focus, textarea:focus, select:focus
    border-bottom-style: solid;
    border-left-style: solid;
    border-top-color: #DDDDDD;
-   border-right-color: #DDDDDD;
+   border-right-color: #A0A0A0;
    border-bottom-color: #DDDDDD;
    border-left-color: #DDDDDD;
    text-align: left;
@@ -4657,9 +5010,62 @@ input:focus, textarea:focus, select:focus
    width: 214px;
    height: 20px;
 }
+#Table1 .cell12
+{
+   background-color: transparent;
+   background-image: none;
+   border-top-width: 0px;
+   border-right-width: 0px;
+   border-bottom-width: 1px;
+   border-left-width: 0px;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+   border-top-color: #DDDDDD;
+   border-right-color: #DDDDDD;
+   border-bottom-color: #DDDDDD;
+   border-left-color: #DDDDDD;
+   text-align: left;
+   vertical-align: top;
+   width: 0px;
+   height: 20px;
+}
 #Table1 tr:nth-child(odd)
 {
-   background-color: #F9F9F9;
+   background-color: #E9E9e9;
+   opacity:0.95;
+}
+#Table1 tr:nth-child(even)
+{
+   background-color: #FFFFFF;
+   opacity:0.95;
+}
+#Table1 tr:last-child{
+   background-color: transparent;
+   opacity:0;
+}
+#Table1 .cell99
+{
+   background-color: transparent;
+   background-image: none;
+   border-top-width: 0px;
+   border-right-width: 0px;
+   border-bottom-width: 1px;
+   border-left-width: 0px;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+   border-top-color: #DDDDDD;
+   border-right-color: #DDDDDD;
+   border-bottom-color: #DDDDDD;
+   border-left-color: #DDDDDD;
+   text-align: left;
+   vertical-align: top;
+   opacity: 0;
+   width: 0px;
+   height: 70px;
 }
 #wb_Line2
 {

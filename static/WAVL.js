@@ -1,57 +1,47 @@
 function WAVL_MAIN(){
-    //console.log("HERE")
-    var venues = "";
-    var wavl_teams = "";
-    var wavjl_teams = "";
-    const url = '/WAVL/PUT';
-    var date = $("#DatePicker2").datepicker("option", "dateFormat", "yy-mm-dd" ).val()
-
-    document.getElementsByName("Venues").forEach((checkbox) => {
-        if(document.getElementById(checkbox.id).checked){
-            venues = venues + "1";
-        }else{
-            venues = venues + "0";
-        }
-    });
-    document.getElementsByName("WAVL_teams").forEach((checkbox) => {
-        if(document.getElementById(checkbox.id).checked){
-            wavl_teams = wavl_teams + "1";
-        }else{
-            wavl_teams = wavl_teams + "0";
-        }
-    });
-    document.getElementsByName("WAVjL_teams").forEach((checkbox) => {
-        if(document.getElementById(checkbox.id).checked){
-            wavjl_teams = wavjl_teams + "1";
-        }else{
-            wavjl_teams = wavjl_teams + "0";
-        }
-    });
-    //console.log(venues)
-
-    document.getElementById("Button4").disabled = true;
-    document.getElementById("Button1").disabled = true;
-    document.getElementById("Button4").value = "Please wait..."
-
     // POST to python URL
+    const url = '/WAVL/PUT';
+
+    var token = generate_token();
+    var force = document.getElementById("Checkbox99").checked;
+    console.log(token)
     var xhttp;
     xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             //console.log(this.responseText);
             document.getElementById("Button4").disabled = false;
+            document.getElementById("Button4").value = "Downloading Scoresheets";
+            document.getElementById("Button4").style.backgroundColor = "green";
+            document.getElementById("Button4").style.fontSize = "20px";
+            window.clearInterval(dots);
+            download(this.responseText);
             document.getElementById("Button4").value = "Generate Scoresheets";
-            document.getElementById("Button1").disabled = false;
-            document.getElementById("Button1").setAttribute( "onClick", "javascript: download('"+this.responseText+"');" );
+            document.getElementById("Button4").style.backgroundColor = "#3370B7";
+            //document.getElementById("Button1").disabled = false;
+            //document.getElementById("Button1").setAttribute( "onClick", "javascript: download('"+this.responseText+"');" );
+        } else if (this.readyState == 4 && this.status == 408){
+            console.log("timeout :(");
+            document.getElementById("Button4").disabled = false;
+            document.getElementById("Button4").value = "Request Timeout. Try again?";
+            document.getElementById("Button4").style.backgroundColor = "red";
+            document.getElementById("Button4").style.fontSize = "15px";
+            window.clearInterval(dots);
         }
     };
     xhttp.open("POST", url, true);
     xhttp.setRequestHeader("Access-Control-Allow-Headers", "*");
-    xhttp.setRequestHeader("VENUES", venues);
-    xhttp.setRequestHeader("WAVL", wavl_teams);
-    xhttp.setRequestHeader("WAVjL", wavjl_teams);
-    xhttp.setRequestHeader("yyyymmdd", date);
+    xhttp.setRequestHeader("TOKEN", token);
+    xhttp.setRequestHeader("FORCE", force);
     xhttp.send();
+    /*var dots = window.setInterval( function() {
+        var wait = document.getElementById("Button4");
+        console.log(wait.value)
+        if ( wait.value.length < 16 )
+            wait.value += ".";
+        else if ( wait.value.length < 17)
+            wait.value = "Please Wait";
+        }, 1000);*/
 }
 
 function select_all_venue(checked = true){
@@ -128,4 +118,47 @@ function download(token){
         }
     }
     xhttp.send();
+}
+
+
+function generate_token(){
+    var date = $("#DatePicker2").datepicker("option", "dateFormat", "yy-mm-dd" ).val()
+    var sep = "-"
+    var venues = ""
+    var wavl = ""
+    var wavjl = ""
+
+    document.getElementsByName("Venues").forEach((checkbox) => {
+        if(document.getElementById(checkbox.id).checked){
+            venues = venues + "1";
+        }else{
+            venues = venues + "0";
+        }
+    });
+    document.getElementsByName("WAVL_teams").forEach((checkbox) => {
+        if(document.getElementById(checkbox.id).checked){
+            wavl = wavl + "1";
+        }else{
+            wavl = wavl + "0";
+        }
+    });
+    document.getElementsByName("WAVjL_teams").forEach((checkbox) => {
+        if(document.getElementById(checkbox.id).checked){
+            wavjl = wavjl + "1";
+        }else{
+            wavjl = wavjl + "0";
+        }
+    });
+    var v_hex = parseInt(venues, 2).toString(16)
+    var w_hex = parseInt(wavl, 2).toString(16)
+    var j_hex = parseInt(wavjl, 2).toString(16)
+    var v_len = venues.length
+    var w_len = wavl.length
+    var j_len = wavjl.length
+    console.log(v_hex)
+    console.log(w_hex)
+    console.log(j_hex)
+    var token = date + sep + v_hex + sep + v_len + sep + w_hex + sep + w_len + sep + j_hex + sep + j_len
+
+    return token
 }

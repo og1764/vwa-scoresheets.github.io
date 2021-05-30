@@ -8,6 +8,8 @@ from flask import Flask, render_template, request, send_from_directory, Response
 from flask import Flask, render_template, session, request, redirect, url_for
 from flask import send_file
 import jinja2
+import shutil
+import time
 
 app = Flask(__name__)
 
@@ -56,20 +58,48 @@ def home():
 
 @app.route("/WAVL/PUT", methods=["PUT", "POST"])
 def WAVL():
-    venue_str = request.headers.get("VENUES")
-    wavl_str = request.headers.get("WAVL")
-    wavjl_str = request.headers.get("WAVjL")
-    date = request.headers.get("yyyymmdd") # yyyy-mm-dd
+    token = request.headers.get("TOKEN")
+    force = request.headers.get("FORCE")
+    # parsed_token = [Venues, WAVL, WAVJL, yyyy-mm-dd]
+    parsed_token = definitions.decrypt_token(token)
+    #venue_str = request.headers.get("VENUES")
+    #wavl_str = request.headers.get("WAVL")
+    #wavjl_str = request.headers.get("WAVjL")
+    #date = request.headers.get("yyyymmdd") # yyyy-mm-dd
+    venue_str = parsed_token[0]
+    wavl_str = parsed_token[1]
+    wavjl_str = parsed_token[2]
+    date = parsed_token[3]
 
     venue_usage = [definitions.venues_list[i] for i in range(len(definitions.venues_list)) if venue_str[i] == "1"]
     wavl_usage = [definitions.wavl_div_list[i] for i in range(len(definitions.wavl_div_list)) if wavl_str[i] == "1"]
     wavjl_usage = [definitions.jl_div_list[i] for i in range(len(definitions.jl_div_list)) if wavjl_str[i] == "1"]
 
-    # token generation
-    token = ''.join(random.choice(string.ascii_letters) for i in range(12))
-    while os.path.exists(definitions.APP_ROOT + "\\Scoresheets\\temp\\" + token):
-        token = ''.join(random.choice(string.ascii_letters) for i in range(12))
-    os.mkdir(definitions.APP_ROOT + "\\Scoresheets\\temp\\" + token)
+    if os.path.exists(definitions.APP_ROOT + "\\Scoresheets\\temp\\" + token) or os.path.isfile(definitions.APP_ROOT + "\\output\\" + token + ".pdf"):
+        if force:
+            try:
+                shutil.rmtree(definitions.APP_ROOT + "\\Scoresheets\\temp\\" + token)
+            except:
+                pass
+            os.mkdir(definitions.APP_ROOT + "\\Scoresheets\\temp\\" + token)
+            try:
+                os.remove(definitions.APP_ROOT + "\\output\\" + token + ".pdf")
+            except:
+                pass
+        else:
+            waitcounter = 0
+            while not os.path.isfile(definitions.APP_ROOT + "\\output\\" + token + ".pdf"):
+                time.sleep(10)
+                waitcounter += 1
+                if waitcounter > 10:
+                    return 408
+            result = send_file(definitions.APP_ROOT + "\\output\\" + token + ".pdf",
+                               mimetype="application/pdf",
+                               as_attachment=True,
+                               conditional=False,
+                               attachment_filename="Scoresheets.pdf")
+            result.headers["x-suggested-filename"] = "Scoresheets.pdf"
+            return result
 
     wavl_fixtures = readPDF.get_fixtures(venue_usage, wavl_usage, date)
     wavjl_fixtures = readPDF.get_fixtures(venue_usage, wavjl_usage, date)
@@ -79,6 +109,11 @@ def WAVL():
 
     files = wavl_files + wavjl_files
     readPDF.generate_output(files, token)
+
+    try:
+        shutil.rmtree(definitions.APP_ROOT + "\\Scoresheets\\temp\\" + token)
+    except:
+        pass
 
     return token
 
