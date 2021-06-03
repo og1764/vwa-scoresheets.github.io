@@ -218,3 +218,28 @@ def merge(overlay_canvas: io.BytesIO, template_path: str) -> io.BytesIO:
 def save(form: io.BytesIO, filename: str):
     with open(filename, 'wb') as f:
         f.write(form.read())
+
+
+def decrypt_token(token):
+    elements = token.split("-")
+    year = elements[0]
+    month = elements[1]
+    day = elements[2]
+
+    integer = int(elements[3], 16)
+    length = elements[4]
+    venues = f'{integer:0>{length}b}'
+
+    integer = int(elements[5], 16)
+    length = elements[6]
+    wavl = f'{integer:0>{length}b}'
+
+    integer = int(elements[7], 16)
+    length = elements[8]
+    wavjl = f'{integer:0>{length}b}'
+
+    yyyy_mm_dd = "-".join([year, month, day])
+    results = [venues, wavl, wavjl, yyyy_mm_dd]
+    print(results)
+
+    return results
