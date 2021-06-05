@@ -105,27 +105,27 @@ wavl_div_list = ["80", "81", "82", "83", "94", "95", "96", "97", "98", "99", "10
 jl_div_list = ['84', '85', '86', '87', '88', '89', '90', '91', '92']
 
 div_dict = {
-    '80': ['State League Women', 'SL Women'],
-    '81': ['State League Men', 'SL Men'],
-    '82': ['State League Reserve Men', 'SLR Men'],
-    '83': ['State League Reserve Women', 'SLR Women'],
-    '84': ['7/8 Female Pool 1', '7/8 F 1'],
-    '85': ['7/8 Female Pool 2', '7/8 F 2'],
-    '86': ['9/10 Female Pool 1', '9/10 F 1'],
-    '87': ['9/10 Female Pool 2', '9/10 F 2'],
-    '88': ['11/12 Female', '11/12 F'],
-    '89': ['11/12 Male', '11/12 M'],
-    '90': ['9/10 Male Pool 1', '9/10 M 1'],
-    '91': ['9/10 Male Pool 2', '9/10 M 2'],
-    '92': ['7/8 Male', '7/8 M'],
-    '94': ['Division 1 Men', 'Div 1 M'],
-    '95': ['Division 1 Women', 'Div 1 Women'],
-    '96': ['Division 2 Men', 'Div 2 Men'],
-    '97': ['Division 2 Women', 'Div 2 Women'],
-    '98': ['Division 3 Men', 'Div 3 Men'],
-    '99': ['Division 3 Women', 'Div 3 Women'],
-    '100': ['Division 4 Men', 'Div 4 Men'],
-    '101': ['Division 5 Men', 'Div 5 Men']
+    '80': ['State League Women', 'SL Women', '80'],
+    '81': ['State League Men', 'SL Men', '81'],
+    '82': ['State League Reserve Men', 'SLR Men', '82'],
+    '83': ['State League Reserve Women', 'SLR Women', '83'],
+    '84': ['7/8 Female Pool 1', '7/8 F 1', '84'],
+    '85': ['7/8 Female Pool 2', '7/8 F 2', '85'],
+    '86': ['9/10 Female Pool 1', '9/10 F 1', '86'],
+    '87': ['9/10 Female Pool 2', '9/10 F 2', '87'],
+    '88': ['11/12 Female', '11/12 F', '88'],
+    '89': ['11/12 Male', '11/12 M', '89'],
+    '90': ['9/10 Male Pool 1', '9/10 M 1', '90'],
+    '91': ['9/10 Male Pool 2', '9/10 M 2', '91'],
+    '92': ['7/8 Male', '7/8 M', '92'],
+    '94': ['Division 1 Men', 'Div 1 M', '94'],
+    '95': ['Division 1 Women', 'Div 1 Women', '95'],
+    '96': ['Division 2 Men', 'Div 2 Men', '96'],
+    '97': ['Division 2 Women', 'Div 2 Women', '97'],
+    '98': ['Division 3 Men', 'Div 3 Men', '98'],
+    '99': ['Division 3 Women', 'Div 3 Women', '99'],
+    '100': ['Division 4 Men', 'Div 4 Men', '100'],
+    '101': ['Division 5 Men', 'Div 5 Men', '101']
 }
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -153,14 +153,14 @@ def get_overlay_canvas_wavl(fixture) -> io.BytesIO:
     pdf.drawCentredString(x=310, y=575, text=fixture.venue_0)
     pdf.drawCentredString(x=310, y=566, text=fixture.venue_1)
     pdf.drawCentredString(x=310, y=557, text=fixture.venue_2)
+    pdf.setFont('Helvetica-Bold', 13)
     pdf.drawCentredString(x=400, y=557, text=fixture.court)
-    pdf.drawString(x=480, y=557, text=str(int(fixture.time_hr)))
+    pdf.drawRightString(x=492, y=557, text=str(int(fixture.time_hr)))
     pdf.drawString(x=500, y=557, text=fixture.time_min)
-    pdf.drawString(x=583, y=557, text=fixture.date_dd)
+    pdf.drawRightString(x=596, y=557, text=str(int(fixture.date_dd)))
     pdf.drawCentredString(x=610, y=557, text=str(int(fixture.date_mm)))
-    pdf.drawString(x=625, y=557, text=fixture.date_yyyy)
-    pdf.setFont('Helvetica', 13)
-    pdf.drawCentredString(x=773, y=557, text=fixture.division[1])
+    pdf.drawString(x=625, y=557, text=fixture.date_yyyy[2:4])
+    pdf.drawCentredString(x=773, y=557.5, text=fixture.division[1])
     pdf.setFont('Helvetica', 14)
     pdf.drawCentredString(x=710, y=528, text=fixture.duty)
 
@@ -186,17 +186,17 @@ def get_overlay_canvas_jl(fixture) -> io.BytesIO:
     pdf.drawCentredString(x=180, y=504, text=fixture.venue_full)
     pdf.drawCentredString(x=562, y=504, text=fixture.court)
     pdf.drawString(x=442, y=504, text=str(int(fixture.time_hr)) + ":" + fixture.time_min)
-    pdf.drawString(x=315, y=504, text=fixture.date_dd + "/" + str(int(fixture.date_mm)) + "/" + fixture.date_yyyy)
+    pdf.drawString(x=315, y=504, text=str(int(fixture.date_dd)) + "/" + str(int(fixture.date_mm)) + "/" + fixture.date_yyyy)
     pdf.drawCentredString(x=720, y=504, text=fixture.division[0])
 
     if len(fixture.team_a) > 25 or len(fixture.team_b) > 25:
         pdf.setFont('Helvetica', 10)
-        pdf.drawCentredString(x=225, y=472, text=fixture.team_a)
-        pdf.drawCentredString(x=655, y=472, text=fixture.team_b)
+        pdf.drawCentredString(x=250, y=472, text=fixture.team_a)
+        pdf.drawCentredString(x=660, y=472, text=fixture.team_b)
     else:
         pdf.setFont('Helvetica', 14)
-        pdf.drawCentredString(x=225, y=472, text=fixture.team_a)
-        pdf.drawCentredString(x=655, y=472, text=fixture.team_b)
+        pdf.drawCentredString(x=250, y=472, text=fixture.team_a)
+        pdf.drawCentredString(x=660, y=472, text=fixture.team_b)
 
     pdf.save()
     data.seek(0)

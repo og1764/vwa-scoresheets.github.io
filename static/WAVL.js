@@ -4,44 +4,51 @@ function WAVL_MAIN(){
 
     var token = generate_token();
     var force = document.getElementById("Checkbox99").checked;
+    document.getElementById("Button4").value = "Please Wait";
+    window.setInterval(dots)
+    document.getElementById("Button4").style.backgroundColor = "gold"
+    document.getElementById("Button4").style.color = "black";
+
     console.log(token)
     var xhttp;
     xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             //console.log(this.responseText);
-            document.getElementById("Button4").disabled = false;
             document.getElementById("Button4").value = "Downloading Scoresheets";
             document.getElementById("Button4").style.backgroundColor = "green";
+            document.getElementById("Button4").style.color = "white";
             document.getElementById("Button4").style.fontSize = "20px";
             window.clearInterval(dots);
-            download(this.responseText);
+            download(token);
             document.getElementById("Button4").value = "Generate Scoresheets";
             document.getElementById("Button4").style.backgroundColor = "#3370B7";
+            document.getElementById("Button4").disabled = false;
             //document.getElementById("Button1").disabled = false;
             //document.getElementById("Button1").setAttribute( "onClick", "javascript: download('"+this.responseText+"');" );
         } else if (this.readyState == 4 && this.status == 408){
             console.log("timeout :(");
             document.getElementById("Button4").disabled = false;
             document.getElementById("Button4").value = "Request Timeout. Try again?";
+            document.getElementById("Button4").style.color = "white";
             document.getElementById("Button4").style.backgroundColor = "red";
             document.getElementById("Button4").style.fontSize = "15px";
             window.clearInterval(dots);
         }
     };
-    xhttp.open("POST", url, true);
+    xhttp.open("GET", url, true);
     xhttp.setRequestHeader("Access-Control-Allow-Headers", "*");
     xhttp.setRequestHeader("TOKEN", token);
     xhttp.setRequestHeader("FORCE", force);
     xhttp.send();
-    /*var dots = window.setInterval( function() {
+    var dots = window.setInterval( function() {
         var wait = document.getElementById("Button4");
         console.log(wait.value)
         if ( wait.value.length < 16 )
             wait.value += ".";
         else if ( wait.value.length < 17)
             wait.value = "Please Wait";
-        }, 1000);*/
+        }, 1000);
 }
 
 function select_all_venue(checked = true){
@@ -115,6 +122,7 @@ function download(token){
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             console.log("done")
+            cleanup();
         }
     }
     xhttp.send();
@@ -161,4 +169,15 @@ function generate_token(){
     var token = date + sep + v_hex + sep + v_len + sep + w_hex + sep + w_len + sep + j_hex + sep + j_len
 
     return token
+}
+
+function cleanup(){
+    var url = '/cleanup'
+    var xhttp = new XMLHttpRequest();
+    xhttp.open('GET', url, true);
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+        }
+    }
+    xhttp.send();
 }

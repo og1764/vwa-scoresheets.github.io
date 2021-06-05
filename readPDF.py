@@ -72,6 +72,35 @@ def jl_pdf(fixtures, token, files):
     return files
 
 
+def gen_pdfs(fixtures, date):
+    all_files = []
+    for fixture in fixtures:
+        file_out = definitions.APP_ROOT + "\\Scoresheets\\temp\\" + date + "\\" + fixture.venue + "-" \
+                   + fixture.court + "-" + fixture.time_hr + fixture.time_min + "-" + fixture.division[2] + ".pdf"
+        if fixture.division[2] in definitions.jl_div_list:
+            canvas_data = definitions.get_overlay_canvas_jl(fixture)
+            form = definitions.merge(canvas_data, template_path=definitions.jl_pdf_default)
+        if fixture.division[2] in definitions.wavl_div_list:
+            canvas_data = definitions.get_overlay_canvas_wavl(fixture)
+            form = definitions.merge(canvas_data, template_path=definitions.wavl_pdf_default)
+        definitions.save(form, filename=file_out)
+        all_files.append(file_out)
+    return all_files
+
+
+def gen_file_list(all_files, venue_usage, wavl_usage, wavjl_usage):
+    file_list = []
+
+    for file in all_files:
+        splitted = file.split('\\')[-1].split("-")
+        venue = splitted[0]
+        division = splitted[-1].replace(".pdf", "")
+
+        if venue in venue_usage and (division in wavl_usage or division in wavjl_usage):
+            file_list.append(file)
+    return file_list
+
+
 def generate_output(files, token):
     output = definitions.APP_ROOT + "\\output\\" + token + ".pdf"
     files.sort()
