@@ -155,8 +155,11 @@ def get_overlay_canvas_wavl(fixture) -> io.BytesIO:
     pdf.drawCentredString(x=310, y=557, text=fixture.venue_2)
     pdf.setFont('Helvetica-Bold', 13)
     pdf.drawCentredString(x=400, y=557, text=fixture.court)
-    pdf.drawRightString(x=492, y=557, text=str(int(fixture.time_hr)))
-    pdf.drawString(x=500, y=557, text=fixture.time_min)
+    try:
+        pdf.drawRightString(x=492, y=557, text=str(int(fixture.time_hr)))
+        pdf.drawString(x=500, y=557, text=fixture.time_min)
+    except ValueError:
+        pass
     pdf.drawRightString(x=596, y=557, text=str(int(fixture.date_dd)))
     pdf.drawCentredString(x=610, y=557, text=str(int(fixture.date_mm)))
     pdf.drawString(x=625, y=557, text=fixture.date_yyyy[2:4])

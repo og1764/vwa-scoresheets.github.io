@@ -28,9 +28,15 @@ def get_fixtures(venues, league, date):
                         date_dd = _date[2]
                         date_mm = _date[1]
                         date_yyyy = _date[0]
-                        time = row[0].split(':')
-                        time_hr = time[0].zfill(2)
-                        time_min = time[1]
+                        print(row)
+                        if type(row[0]) == type(0.01):
+                            time = ""
+                            time_hr = " "
+                            time_min = " "
+                        else:
+                            time = row[0].split(':')
+                            time_hr = time[0].zfill(2)
+                            time_min = time[1]
 
                         tmp_venue = definitions.venues_dict[venue.lower()].split("*")
                         venue_0 = tmp_venue[0]

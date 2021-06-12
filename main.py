@@ -62,17 +62,21 @@ def WAVL():
     print('start')
     token = request.headers.get("TOKEN")
     force = request.headers.get("FORCE")
+    venue_str = ""
+    wavl_str = ""
+    wavjl_str = ""
+    date = ""
+    venue_usage = []
+    wavl_usage = []
+    wavjl_usage = []
+
     # parsed_token = [Venues, WAVL, WAVJL, yyyy-mm-dd]
     parsed_token = definitions.decrypt_token(token)
-    #venue_str = request.headers.get("VENUES")
-    #wavl_str = request.headers.get("WAVL")
-    #wavjl_str = request.headers.get("WAVjL")
-    #date = request.headers.get("yyyymmdd") # yyyy-mm-dd
     venue_str = parsed_token[0]
     wavl_str = parsed_token[1]
     wavjl_str = parsed_token[2]
     date = parsed_token[3]
-
+    print(venue_str)
     venue_usage = [definitions.venues_list[i] for i in range(len(definitions.venues_list)) if venue_str[i] == "1"]
     wavl_usage = [definitions.wavl_div_list[i] for i in range(len(definitions.wavl_div_list)) if wavl_str[i] == "1"]
     wavjl_usage = [definitions.jl_div_list[i] for i in range(len(definitions.jl_div_list)) if wavjl_str[i] == "1"]
@@ -97,21 +101,40 @@ def WAVL():
             except:
                 pass
         else:
-            waitcounter = 0
-            print(95)
-            while not os.path.isfile(definitions.APP_ROOT + "\\output\\" + token + ".pdf"):
-                print(97)
-                time.sleep(10)
-                waitcounter += 1
-                if waitcounter > 10:
-                    return "timeout", 408
-            #result = send_file(definitions.APP_ROOT + "\\output\\" + token + ".pdf",
-            #                   mimetype="application/pdf",
-            #                   as_attachment=True,
-            #                   conditional=False,
-            #                   attachment_filename="Scoresheets.pdf")
-            #result.headers["x-suggested-filename"] = "Scoresheets.pdf"
-            return "True"
+            if os.path.isfile(definitions.APP_ROOT + "\\output\\" + token + ".pdf"):
+                waitcounter = 0
+                print(95)
+                while not os.path.isfile(definitions.APP_ROOT + "\\output\\" + token + ".pdf"):
+                    print(97)
+                    time.sleep(10)
+                    waitcounter += 1
+                    if waitcounter > 10:
+                        return "timeout", 408
+                #result = send_file(definitions.APP_ROOT + "\\output\\" + token + ".pdf",
+                #                   mimetype="application/pdf",
+                #                   as_attachment=True,
+                #                   conditional=False,
+                #                   attachment_filename="Scoresheets.pdf")
+                #result.headers["x-suggested-filename"] = "Scoresheets.pdf"
+                return "True"
+            else:
+                print(117)
+                directory = definitions.APP_ROOT + "\\Scoresheets\\temp\\" + date + "\\"
+
+                all_files = [directory + i for i in os.listdir(directory)]
+
+                files = readPDF.gen_file_list(all_files, venue_usage, wavl_usage, wavjl_usage)
+
+                readPDF.generate_output(files, token)
+
+                result = send_file(definitions.APP_ROOT + "\\output\\" + token + ".pdf",
+                                   mimetype="application/pdf",
+                                   as_attachment=True,
+                                   conditional=False,
+                                   attachment_filename="Scoresheets.pdf")
+                result.headers["x-suggested-filename"] = "Scoresheets.pdf"
+                return "True"
+
     print(109)
     try:
         os.mkdir(definitions.APP_ROOT + "\\Scoresheets\\temp\\" + date)

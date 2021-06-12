@@ -8,6 +8,7 @@ function WAVL_MAIN(){
     window.setInterval(dots)
     document.getElementById("Button4").style.backgroundColor = "gold"
     document.getElementById("Button4").style.color = "black";
+    document.getElementById("Button4").disabled = true;
 
     console.log(token)
     var xhttp;
