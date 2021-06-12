@@ -347,30 +347,133 @@ function pdf_init(venues, wavl, wavjl, date){
 }
 
 async function modifyPdf(fixtures) {
-    var total = new Array(2);
+    var total = new Array(fixtures.length);
 
-    for (var i = 0; i < 2; i++) {
+    for (var i = 0; i < fixtures.length; i++) {
 
-        const {PDFDocument, StandardFonts, rgb} = PDFLib
+        const {PDFDocument, StandardFonts, rgb} = PDFLib;
+        var url = "";
+        console.log(fixtures[i].division[0][0])
+        if(fixtures[i].division[0][0] == "D" ||  fixtures[i].division[0][0] == "S"){
+                        console.log("11")
+            url = "/static/def.pdf";
+        }else{
+            url = "/static/def_jl.pdf";
+        }
 
-        const url = '/static/def.pdf'
         const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer())
 
         const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes)
         const helveticaFont = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica)
+        const helveticaBold = await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold)
         const pages = pdfDoc.getPages()
         const firstPage = pages[0]
         const {width, height} = firstPage.getSize()
-        firstPage.drawText(fixtures[i].court, {
-            x: 400,
-            y: 557,
-            size: 13,
-            font: helveticaFont
-        })
 
-        //const pdfBytes = await pdfDoc.saveAsBase64()
+        if(fixtures[i].division[0][0] == "D" ||  fixtures[i].division[0][0] == "S"){
+            console.log("22")
+            firstPage.drawText(fixtures[i].venue_0, {
+                x: 310,
+                y: 575,
+                size: 10,
+                font: helveticaFont
+            })
+            firstPage.drawText(fixtures[i].venue_1, {
+                x: 310,
+                y: 566,
+                size: 10,
+                font: helveticaFont
+            })
+            firstPage.drawText(fixtures[i].venue_2, {
+                x: 310,
+                y: 557,
+                size: 10,
+                font: helveticaFont
+            })
+            firstPage.drawText(fixtures[i].court, {
+                x: 400,
+                y: 557,
+                size: 13,
+                font: helveticaBold
+            })
+            try {
+                firstPage.drawText(parseInt(fixtures[i].time_hr).toString(), {
+                    x: 492,
+                    y: 557,
+                    size: 13,
+                    font: helveticaBold
+                })
+                firstPage.drawText(fixtures[i].time_min, {
+                    x: 500,
+                    y: 557,
+                    size: 13,
+                    font: helveticaBold
+                })
+            }catch (e){console.log(e);}
+            // catch - continue
+            firstPage.drawText(parseInt(fixtures[i].date_dd).toString(), {
+                x: 596,
+                y: 557,
+                size: 13,
+                font: helveticaBold
+            })
+            firstPage.drawText(parseInt(fixtures[i].date_mm).toString(), {
+                x: 610,
+                y: 557,
+                size: 13,
+                font: helveticaBold
+            })
+            firstPage.drawText(fixtures[i].date_yyyy.slice(2,4), {
+                x: 625,
+                y: 557,
+                size: 13,
+                font: helveticaBold
+            })
+            firstPage.drawText(fixtures[i].division[1], {
+                x: 773,
+                y: 557.5,
+                size: 13,
+                font: helveticaBold
+            })
+            firstPage.drawText(fixtures[i].duty, {
+                x: 710,
+                y: 528,
+                size: 14,
+                font: helveticaFont
+            })
+            // if length > 18
+            if(fixtures[i].team_a.length > 18 || fixtures[i].team_b.length > 18) {
+                firstPage.drawText(fixtures[i].team_a, {
+                    x: 320,
+                    y: 527,
+                    size: 10,
+                    font: helveticaFont
+                })
+                firstPage.drawText(fixtures[i].team_b, {
+                    x: 460,
+                    y: 527,
+                    size: 10,
+                    font: helveticaFont
+                })
+            }else {
+                firstPage.drawText(fixtures[i].team_a, {
+                    x: 320,
+                    y: 527,
+                    size: 14,
+                    font: helveticaFont
+                })
+                firstPage.drawText(fixtures[i].team_b, {
+                    x: 460,
+                    y: 527,
+                    size: 14,
+                    font: helveticaFont
+                })
+            }
+        }else{
+            url = "/static/def_jl.pdf";
+        }
 
-        //console.log(pdfBytes)
+
         total[i] =  await pdfDoc.saveAsBase64();
     }
     //download(pdfBytes, "pdf-lib_creation_example.pdf", "application/pdf");
@@ -381,17 +484,12 @@ async function modifyPdf(fixtures) {
 
 async function mergePDFDocuments(documents) {
 	const mergedPdf = await PDFLib.PDFDocument.create();
-
-	var docone = await PDFLib.PDFDocument.load(await documents[0]);
-    var copiedPagesone = await mergedPdf.copyPages(docone, [0, 1]);
-    await mergedPdf.addPage(await copiedPagesone[0]);
-    await mergedPdf.addPage(await copiedPagesone[1]);
-
-    var doctwo = await PDFLib.PDFDocument.load(await documents[1]);
-    var copiedPagestwo = await mergedPdf.copyPages(doctwo, [0, 1]);
-    await mergedPdf.addPage(await copiedPagestwo[0]);
-    await mergedPdf.addPage(await copiedPagestwo[1]);
-
+    for(var i = 0; i < documents.length; i++) {
+        var docone = await PDFLib.PDFDocument.load(await documents[i]);
+        var copiedPagesone = await mergedPdf.copyPages(docone, [0, 1]);
+        await mergedPdf.addPage(await copiedPagesone[0]);
+        await mergedPdf.addPage(await copiedPagesone[1]);
+    }
 	var saved = await mergedPdf.save();
 
 	return await saved;

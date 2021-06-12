@@ -54,7 +54,7 @@ def home():
 
         items.append(item)
 
-    return render_template("vwa-export.html", items=items)
+    return render_template("volleyballwa.github.io.html", items=items)
 
 
 @app.route("/WAVL/PUT", methods=["PUT", "POST", "GET"])
