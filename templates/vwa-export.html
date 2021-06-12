@@ -13,6 +13,10 @@
         <script src="../static/jquery-1.12.4.min.js"></script>
         <script src="../static/jquery-ui.min.js"></script>
         <script src="../static/WAVL.js"></script>
+        <script src="https://unpkg.com/pdf-lib@1.16.0"></script>
+        <script src="https://unpkg.com/pdf-lib@1.16.0/dist/pdf-lib.js"></script>
+        <script src="https://unpkg.com/pdf-lib@1.16.0/dist/pdf-lib.min.js"></script>
+        <script src="https://unpkg.com/downloadjs@1.4.7"></script>
         <script>
             function nextSunday(){
                 var d = new Date()
@@ -44,6 +48,7 @@
             <div id="wb_Form2" style="position:absolute;left:56px;top:144px;width:858px;height:220px;z-index:276;">
                 <form name="WAVL_Advanced" id="Form2">
                     <input type="button" id="Button4" name="Generate Scoresheets" value="Generate Scoresheets" style="position:absolute;left:450px;top:74px;width:243px;height:50px;z-index:89;" onclick="WAVL_MAIN()">
+                    <input type="button" id="Button4" name="ONLINE" value="ONLINE" style="position:absolute;left:450px;top:20px;width:243px;height:50px;z-index:89;" onclick="WAVL_ONLINE()">
                     <div id="wb_Checkbox99">
                         <input type="checkbox" id="Checkbox99" name="Force?" value="on" checked="" style="display:inline-block;" title="Use cached scoresheets?" style="position:absolute;left:450px;top:140px;z-index:89;">
                         <label for="Checkbox99"></label>
