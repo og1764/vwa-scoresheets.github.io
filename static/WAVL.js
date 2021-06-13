@@ -314,26 +314,27 @@ function WAVL_ONLINE(){
     pdf_init(venues, wavl, wavjl, date)
 }
 
-function pdf_init(venues, wavl, wavjl, date){
+function pdf_init(venues, wavl, wavjl, date) {
     var concatted = wavl.concat(wavjl)
     var leagues = []
     console.log(concatted)
     console.log("*")
-    for (var i = 0; i < concatted.length; i++){
+    for (var i = 0; i < concatted.length; i++) {
         leagues.push(DIVISIONS[concatted[i]])
     }
     console.log("*")
     console.log(leagues)
-    var fixtures = get_fixtures(venues, leagues, date);
-    console.log("back to main");
+
     var mix = []
     //modifyPdf(fixtures[0]).then(value => {mix.push(value)})
     //modifyPdf(fixtures[1]).then(value => {mix.push(value)})
-    modifyPdf(fixtures).then(value => {
-        Promise.all(value).then(value_3 => {
-            mergePDFDocuments(value_3).then(value_2 => {
-                console.log(value_2);
-                download(value_2, "help.pdf", "application/pdf");
+    Promise.all(get_fixtures(venues, leagues, date)).then(fix_val => {
+        modifyPdf(fix_val).then(value => {
+            Promise.all(value).then(value_3 => {
+                mergePDFDocuments(value_3).then(value_2 => {
+                    console.log(value_2);
+                    download(value_2, "help.pdf", "application/pdf");
+                })
             })
         })
     })
@@ -347,63 +348,63 @@ function pdf_init(venues, wavl, wavjl, date){
 }
 
 async function modifyPdf(fixtures) {
+    const {PDFDocument, StandardFonts, rgb} = PDFLib;
     var total = new Array(fixtures.length);
-
+    console.log(fixtures)
     for (var i = 0; i < fixtures.length; i++) {
-
-        const {PDFDocument, StandardFonts, rgb} = PDFLib;
         var url = "";
-        console.log(fixtures[i].division[0][0])
+        console.log(fixtures[i].division)
         if(fixtures[i].division[0][0] == "D" ||  fixtures[i].division[0][0] == "S"){
-                        console.log("11")
             url = "/static/def.pdf";
         }else{
             url = "/static/def_jl.pdf";
         }
 
-        const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer())
+        var existingPdfBytes = await fetch(url).then(res => res.arrayBuffer())
 
-        const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes)
-        const helveticaFont = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica)
-        const helveticaBold = await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold)
-        const pages = pdfDoc.getPages()
-        const firstPage = pages[0]
-        const {width, height} = firstPage.getSize()
+        var pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes)
+        var helveticaFont = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica)
+        var helveticaBold = await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold)
+        var pages = await pdfDoc.getPages()
+        var firstPage = await pages[0]
 
         if(fixtures[i].division[0][0] == "D" ||  fixtures[i].division[0][0] == "S"){
-            console.log("22")
-            firstPage.drawText(fixtures[i].venue_0, {
-                x: 310,
+            await firstPage.drawText(fixtures[i].venue_0, {
+                x: parseInt((310 - measureText(fixtures[i].venue_0,10)).toString()),
                 y: 575,
                 size: 10,
                 font: helveticaFont
             })
-            firstPage.drawText(fixtures[i].venue_1, {
-                x: 310,
+            await firstPage.drawText(fixtures[i].venue_1, {
+                x: parseInt((310 - measureText(fixtures[i].venue_1,10)).toString()),
                 y: 566,
                 size: 10,
                 font: helveticaFont
             })
-            firstPage.drawText(fixtures[i].venue_2, {
-                x: 310,
+            await firstPage.drawText(fixtures[i].venue_2, {
+                x: parseInt((310 - measureText(fixtures[i].venue_2,10)).toString()),
                 y: 557,
                 size: 10,
                 font: helveticaFont
             })
-            firstPage.drawText(fixtures[i].court, {
-                x: 400,
+            await firstPage.drawText(fixtures[i].court, {
+                x: parseInt((400 - measureBold(fixtures[i].court,13)).toString()),
                 y: 557,
                 size: 13,
                 font: helveticaBold
             })
             try {
-                firstPage.drawText(parseInt(fixtures[i].time_hr).toString(), {
-                    x: 492,
+                var hour = " ";
+                if (parseInt(fixtures[i].time_hr).toString().length == 1) {
+                    hour = " " + parseInt(fixtures[i].time_hr).toString()
+                }else{hour = parseInt(fixtures[i].time_hr).toString()}
+                await firstPage.drawText(hour, {
+                    x: parseInt((492 - measureBold(hour,13) - measureBold(hour,13)).toString()),
                     y: 557,
                     size: 13,
                     font: helveticaBold
                 })
-                firstPage.drawText(fixtures[i].time_min, {
+                await firstPage.drawText(fixtures[i].time_min, {
                     x: 500,
                     y: 557,
                     size: 13,
@@ -411,59 +412,65 @@ async function modifyPdf(fixtures) {
                 })
             }catch (e){console.log(e);}
             // catch - continue
-            firstPage.drawText(parseInt(fixtures[i].date_dd).toString(), {
-                x: 596,
+            var dd = " ";
+            if (parseInt(fixtures[i].date_dd).toString().length == 1) {
+                dd = " " + parseInt(fixtures[i].date_dd).toString()
+            }else{dd = parseInt(fixtures[i].date_dd).toString()}
+
+            await firstPage.drawText(dd, {
+                x: parseInt((596 - measureBold(dd,13) - measureBold(dd,13)).toString()),
                 y: 557,
                 size: 13,
                 font: helveticaBold
             })
-            firstPage.drawText(parseInt(fixtures[i].date_mm).toString(), {
-                x: 610,
+            await firstPage.drawText(parseInt(fixtures[i].date_mm).toString(), {
+                x: parseInt((611 - measureBold(fixtures[i].date_mm,13)).toString()),
                 y: 557,
                 size: 13,
                 font: helveticaBold
             })
-            firstPage.drawText(fixtures[i].date_yyyy.slice(2,4), {
+            await firstPage.drawText(fixtures[i].date_yyyy.slice(2,4), {
                 x: 625,
                 y: 557,
                 size: 13,
                 font: helveticaBold
             })
-            firstPage.drawText(fixtures[i].division[1], {
-                x: 773,
+            await firstPage.drawText(fixtures[i].division[1], {
+                x: parseInt((773 - measureBold(fixtures[i].division[1],13)).toString()),
                 y: 557.5,
                 size: 13,
                 font: helveticaBold
             })
-            firstPage.drawText(fixtures[i].duty, {
-                x: 710,
+            await firstPage.drawText(fixtures[i].duty, {
+                x: parseInt((710 - measureText(fixtures[i].duty,14)).toString()),
                 y: 528,
                 size: 14,
                 font: helveticaFont
             })
             // if length > 18
             if(fixtures[i].team_a.length > 18 || fixtures[i].team_b.length > 18) {
-                firstPage.drawText(fixtures[i].team_a, {
-                    x: 320,
+                await firstPage.drawText(fixtures[i].team_a, {
+                    x: parseInt((320 - measureText(fixtures[i].team_a,10)).toString()),
                     y: 527,
                     size: 10,
                     font: helveticaFont
                 })
-                firstPage.drawText(fixtures[i].team_b, {
-                    x: 460,
+                await firstPage.drawText(fixtures[i].team_b, {
+                    x: parseInt((460 - measureText(fixtures[i].team_b,10)).toString()),
                     y: 527,
                     size: 10,
                     font: helveticaFont
                 })
             }else {
-                firstPage.drawText(fixtures[i].team_a, {
-                    x: 320,
+                pdfDoc.TextAlignment = 1;
+                await firstPage.drawText(fixtures[i].team_a, {
+                    x: parseInt((320 - measureText(fixtures[i].team_a,14)).toString()),
                     y: 527,
                     size: 14,
                     font: helveticaFont
                 })
-                firstPage.drawText(fixtures[i].team_b, {
-                    x: 460,
+                await firstPage.drawText(fixtures[i].team_b, {
+                    x: parseInt((460 - measureText(fixtures[i].team_b,14)).toString()),
                     y: 527,
                     size: 14,
                     font: helveticaFont
@@ -471,10 +478,11 @@ async function modifyPdf(fixtures) {
             }
         }else{
             url = "/static/def_jl.pdf";
+            console.log("Junior league...???")
         }
 
-
-        total[i] =  await pdfDoc.saveAsBase64();
+        var saved = await pdfDoc.saveAsBase64();
+        total[i] = saved;
     }
     //download(pdfBytes, "pdf-lib_creation_example.pdf", "application/pdf");
     console.log(total);
@@ -483,8 +491,9 @@ async function modifyPdf(fixtures) {
 }
 
 async function mergePDFDocuments(documents) {
-	const mergedPdf = await PDFLib.PDFDocument.create();
+	var mergedPdf = await PDFLib.PDFDocument.create();
     for(var i = 0; i < documents.length; i++) {
+        console.log(i)
         var docone = await PDFLib.PDFDocument.load(await documents[i]);
         var copiedPagesone = await mergedPdf.copyPages(docone, [0, 1]);
         await mergedPdf.addPage(await copiedPagesone[0]);
@@ -498,23 +507,102 @@ async function mergePDFDocuments(documents) {
 }
 
 
-function get_fixtures(venue_usage, leagues, date) {
+function get_URLS(leagues, date){
+    var all_urls = []
+    for(var i = 0; i < leagues.length; i++){
+        var url = head + leagues[k][2] + "/" + date.toString();
+        all_urls.push(url)
+    }
+    return all_urls
+}
+
+
+async function get_fixtures(venue_usage, leagues, date) {
     const head = 'https://cors.bridged.cc/vwa.bracketpal.com/dailyform/';
-    var fixtures = [];
-    var done = 0;
+    var fixtures_list = [];
+    var html_list = [];
+
     if (venue_usage.includes("Methodist Ladies College")) {
         venue_usage.push("MLC");
     }
-    console.log(leagues)
+
+    for(var x = 0; x < all_html.length; x++) {
+        var parser = new DOMParser();
+        var htmlDoc = parser.parseFromString(all_html[x], 'text/html');
+        try {
+            var table = htmlDoc.getElementsByTagName("table")[2]
+            var rowLength = table.rows.length;
+            for (var i = 1; i < rowLength; i++) {
+                var cells = table.rows.item(i).cells;
+                var venue = cells.item(1).innerText;
+                console.log(venue);
+                var venue_split = venue.split(" Ct")
+                var zero_venue_split = venue_split[0].replaceAll(" Ct", "");
+                ;
+                if (venue_usage.includes(zero_venue_split)) {
+                    var court = cells.item(1).innerText.split("Ct")[1];
+                    var team_a = cells.item(2).innerText;
+                    var team_b = cells.item(5).innerText;
+                    var duty = " ";
+                    var time_hr = " ";
+                    var time_min = " ";
+                    try {
+                        duty = cells.item(7).innerText.slice(5);
+                    } catch (e) {
+                        console.log(e)
+                        duty = " ";
+                    }
+                    var division = leagues[j];
+                    console.log(division)
+                    var _date = date.split('-');
+                    var date_dd = _date[2];
+                    var date_mm = _date[1];
+                    var date_yyyy = _date[0]
+                    try {
+                        var time = cells.item(0).innerText.split(":")
+                        time_hr = time[0].padStart(2, "0");
+                        time_min = time[1];
+                    } catch (e) {
+                        console.log(e);
+                        time_hr = " ";
+                        time_min = " ";
+                    }
+                    var tmp_venue = VENUE_SPLIT[zero_venue_split.toLowerCase()].split("*");
+                    var venue_0 = tmp_venue[0]
+                    var venue_1 = tmp_venue[1]
+                    var venue_2 = tmp_venue[2]
+                    var venue_full = VENUE_SPLIT[zero_venue_split.toLowerCase()].replaceAll("*", " ").trimLeft();
+                    var sorting = venue_full + " " + court + " " + time_hr
+                    var fix = new Fixture(zero_venue_split, venue_0, venue_1, venue_2, venue_full, court,
+                        team_a, team_b, duty, division, date_dd, date_mm, date_yyyy, time_hr, time_min, sorting)
+
+                    fixtures_list.push(fix)
+                    console.log(fixtures_list)
+                } else {
+                    console.log("UNUSED VENUE")
+                    console.log(zero_venue_split)
+                }
+
+            }
+        } catch (e) {
+            console.log(e + " " + url)
+        }
+    }
+    return fixtures_list
+    /*
     for (var j = 0; j < leagues.length; j++){
         console.log(leagues[j])
-        let url = head + leagues[j][2] + "/" + date.toString();
+        console.log("list of leagues")
+        var url = head + leagues[j][2] + "/" + date.toString();
         var xhttp;
-        xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
+        fetch(url).then(responseText => {
+
+        //xhttp = new XMLHttpRequest();
+        //xhttp.onreadystatechange = function () {
+        //    if (this.readyState == 4 && this.status == 200) {
+                console.log(url)
                 var parser = new DOMParser();
-                var htmlDoc = parser.parseFromString(this.responseText, 'text/html');
+                var htmlDoc = parser.parseFromString(responseText, 'text/html');
                 try {
                     var table = htmlDoc.getElementsByTagName("table")[2]
                     var rowLength = table.rows.length;
@@ -536,6 +624,7 @@ function get_fixtures(venue_usage, leagues, date) {
                                 console.log(e)
                                 duty = " ";}
                             var division = leagues[j];
+                            console.log(division)
                             var _date = date.split('-');
                             var date_dd = _date[2];
                             var date_mm = _date[1];
@@ -558,14 +647,16 @@ function get_fixtures(venue_usage, leagues, date) {
                             var fix = new Fixture(zero_venue_split, venue_0, venue_1, venue_2, venue_full, court,
                                 team_a, team_b, duty, division, date_dd, date_mm, date_yyyy, time_hr, time_min, sorting)
 
-                            fixtures.push(fix)
-                            done = done + 1;
+                            fixtures_list.push(fix)
+                            console.log(fixtures_list)
+                        } else {
+                            console.log("UNUSED VENUE")
+                            console.log(zero_venue_split)
                         }
 
                     }
                 } catch (e) {
                     console.log(e + " " + url)
-                    done = done + 1
                 }
             }
         }
@@ -573,8 +664,87 @@ function get_fixtures(venue_usage, leagues, date) {
         xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
         xhttp.setRequestHeader("Access-Control-Allow-Headers", "*");
         xhttp.send();
+    } */
+    //var sorted_fixtures = fixtures.sort((a,b) => (a.sorting > b.sorting) ? 1 : ((b.sorting > a.sorting) ? -1 : 0))
+    //console.log(sorted_fixtures)
+}
+
+function measureText(string, fontSize = 10) {
+    const widths = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.1546875,0.278125,0.4,0.721875,0.5609375,0.9609375,0.7203125,0.240625,0.4,0.4,0.48125,0.640625,0.278125,0.4,0.278125,0.4015625,0.5609375,0.55625,0.5609375,0.5609375,0.640625,0.5609375,0.5609375,0.5609375,0.5609375,0.5609375,0.278125,0.278125,0.640625,0.640625,0.640625,0.5609375,1.1203125,0.88125,0.7203125,0.8,0.7234375,0.7203125,0.640625,0.8,0.7234375,0.278125,0.5,0.8,0.640625,0.88125,0.7234375,0.8,0.7203125,0.8,0.8,0.7203125,0.640625,0.7234375,0.8015625,1.121875,0.8015625,0.8015625,0.721875,0.3203125,0.48125,0.3203125,0.48125,0.721875,0.334375,0.5609375,0.640625,0.5609375,0.5609375,0.5609375,0.48125,0.5609375,0.5609375,0.240625,0.321875,0.5609375,0.240625,0.88125,0.5609375,0.5609375,0.640625,0.5609375,0.4,0.5609375,0.4015625,0.5609375,0.6421875,0.88125,0.6421875,0.6421875,0.6421875,0.4,0.2609375,0.48125,0.640625]
+    const avg = 0.5823026315789476
+    try {
+        var tmp = string
+            .split('')
+            .map(c => c.charCodeAt(0) < widths.length ? widths[c.charCodeAt(0)] : avg)
+            .reduce((cur, acc) => acc + cur) * fontSize
+        return tmp / 2;
+    }catch{return 0}
+}
+
+function measureBold(string, fontSize = 10) {
+    const widths = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.1265625,0.334375,0.409375,0.6421875,0.5609375,0.88125,0.8,0.18125,0.4,0.4,0.5,0.721875,0.25,0.4,0.25,0.4015625,0.5609375,0.5,0.5609375,0.5,0.5609375,0.5,0.5609375,0.5609375,0.5609375,0.5609375,0.278125,0.3203125,0.721875,0.721875,0.721875,0.48125,0.9609375,0.88125,0.8015625,0.7203125,0.88125,0.721875,0.721875,0.8,0.88125,0.4,0.5625,0.88125,0.721875,1.0421875,0.88125,0.8,0.721875,0.8,0.88125,0.5609375,0.640625,0.88125,0.88125,1.040625,0.88125,0.8,0.8015625,0.4,0.4015625,0.334375,0.6421875,0.6421875,0.334375,0.5609375,0.6421875,0.48125,0.5609375,0.48125,0.5609375,0.5609375,0.6421875,0.3203125,0.4390625,0.6421875,0.3203125,0.9625,0.6421875,0.5609375,0.6421875,0.5609375,0.48125,0.4,0.4015625,0.6421875,0.6421875,0.88125,0.6421875,0.6421875,0.5625,0.48125,0.2015625,0.48125,0.721875]
+    const avg = 0.5999835526315791
+    try {
+        var tmp = string
+            .split('')
+            .map(c => c.charCodeAt(0) < widths.length ? widths[c.charCodeAt(0)] : avg)
+            .reduce((cur, acc) => acc + cur) * fontSize
+        return tmp / 2;
+    }catch{return 0}
+}
+
+
+// Function to fetch Github info of a user.
+const fetchGithubInfo = async (url) => {
+  const githubInfo = await fetch(url).then((response) => response.text())
+    return githubInfo // API call to get user info from Github.
+}
+
+// Iterates all users and returns their Github info.
+const fetchUserInfo = async (url_list) => {
+  const requests = url_list.map((url_ind) => {
+    return fetchGithubInfo(url_ind) // Async function that fetches the user info.
+     .then((a) => {
+      return a // Returns the user info.
+      })
+  })
+  return Promise.all(requests) // Waiting for all the requests to get resolved.
+}
+
+
+fetchUserInfo(['sindresorhus', 'yyx990803', 'gaearon'])
+ .then(a => console.log(JSON.stringify(a)))
+
+/* Client side, works in Chrome 55 and Firefox 52 without transpilation */
+//https://blogs.msdn.microsoft.com/typescript/2016/11/08/typescript-2-1-rc-better-inference-async-functions-and-more/
+async function fetchURLs(urls) {
+try {
+      // Promise.all() lets us coalesce multiple promises into a single super-promise
+    var list_of_all = async (url)
+      var data = await Promise.all([
+        /* Alternatively store each in an array */
+        // var [x, y, z] = await Promise.all([
+        // parse results as json; fetch data response has several reader methods available:
+        //.arrayBuffer()
+        //.blob()
+        //.formData()
+        //.json()
+        //.text()
+        fetch('https://jsonplaceholder.typicode.com/posts').then((response) => response.text()),// parse each response as json
+        fetch('https://jsonplaceholder.typicode.com/albums').then((response) => response.text()),
+        fetch('https://jsonplaceholder.typicode.com/users').then((response) => response.text())
+      ]);
+
+      for (var i of data) {
+        console.log(`RESPONSE ITEM \n`);
+        for (var obj of i) {
+          console.log(obj);
+          //logger utility method, logs output to screen
+          console.log(obj);
+        }
+      }
+
+    } catch (error) {
+      console.log(error);
     }
-    var sorted_fixtures = fixtures.sort((a,b) => (a.sorting > b.sorting) ? 1 : ((b.sorting > a.sorting) ? -1 : 0))
-    console.log(sorted_fixtures)
-    return sorted_fixtures
 }
