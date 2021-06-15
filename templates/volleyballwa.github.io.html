@@ -13,6 +13,10 @@
         <script src="../static/jquery-1.12.4.min.js"></script>
         <script src="../static/jquery-ui.min.js"></script>
         <script src="../static/WAVL.js"></script>
+        <script src="https://unpkg.com/pdf-lib@1.16.0"></script>
+        <script src="https://unpkg.com/pdf-lib@1.16.0/dist/pdf-lib.js"></script>
+        <script src="https://unpkg.com/pdf-lib@1.16.0/dist/pdf-lib.min.js"></script>
+        <script src="https://unpkg.com/downloadjs@1.4.7"></script>
         <script>
             function nextSunday(){
                 var d = new Date()
@@ -43,13 +47,14 @@
             <a href="https://www.wysiwygwebbuilder.com" target="_blank"><img src="../static/images/builtwithwwb16.png" alt="WYSIWYG Web Builder" style="position:absolute;left:254px;top:230px;margin: 0;border-width:0;z-index:250"></a>
             <div id="wb_Form2" style="position:absolute;left:56px;top:144px;width:858px;height:220px;z-index:276;">
                 <form name="WAVL_Advanced" id="Form2">
-                    <input type="button" id="Button4" name="Generate Scoresheets" value="Generate Scoresheets" style="position:absolute;left:450px;top:104px;width:243px;height:50px;z-index:89;" onclick="WAVL_MAIN()">
+                    <input type="button" id="Button4" name="Generate Scoresheets" value="Generate Scoresheets" style="position:absolute;left:450px;top:74px;width:243px;height:50px;z-index:89;" onclick="WAVL_MAIN()">
+                    <input type="button" id="Button4" name="ONLINE" value="ONLINE" style="position:absolute;left:450px;top:20px;width:243px;height:50px;z-index:89;" onclick="WAVL_ONLINE()">
                     <div id="wb_Checkbox99">
                         <input type="checkbox" id="Checkbox99" name="Force?" value="on" checked="" style="display:inline-block;" title="Use cached scoresheets?" style="position:absolute;left:450px;top:140px;z-index:89;">
                         <label for="Checkbox99"></label>
                         <div id="wb_Text99">
-                            <span style="color:#000000;font-family:Arial;font-size:15px;position:absolute;left:475px;top:161px;">Use cached scoresheets?</span>
-                            <span style="color:#000000;font-family:Arial;font-size:12px;position:absolute;left:475px;top:177px;">Faster, but ignores any fixture changes.</span>
+                            <span style="color:#000000;font-family:Arial;font-size:15px;position:absolute;left:475px;top:130px;">Use cached scoresheets?</span>
+                            <span style="color:#000000;font-family:Arial;font-size:12px;position:absolute;left:475px;top:147px;">Faster, but ignores any fixture changes.</span>
                         </div>
                     </div><!--<input type="button" id="Button4" name="Generate Scoresheets" value="Generate Scoresheets" style="position:absolute;left:436px;top:77px;width:223px;height:25px;z-index:89;" onclick="WAVL_MAIN()">
                     <input type="button" id="Button1" name="Download Scoresheets" value="Download Scoresheets" style="position:absolute;left:436px;top:146px;width:223px;height:25px;z-index:91;" disabled="">
@@ -189,16 +194,13 @@
             <div id="wb_Image1" style="position:absolute;left:124px;top:1px;width:723px;height:110px;z-index:277;">
                 <img src="../static/images/logo.jpg" id="Image1" alt="">
             </div>
-            <div id="wb_ClipArt1" style="position:absolute;left:0px;top:1px;width:50px;height:50px;z-index:278;">
-                <img src="../static/images/img0001.png" id="ClipArt1" alt="" style="width:50px;height:50px;">
-            </div>
             <div id="individual" style="position:absolute;left:56px;top:377px;width:858px;height:80px;z-index:276;">
             <!--<div id="individual" style="position:absolute;left:56px;top:377px;width:858px;height:80px;z-index:276;">
                 The plan here is to make blank 5 set, 3 set, WAVJL, and rotation slips available for download.
                 -->
-                <table style="position:absolute;left:0px;top:0px;width:858px;height:80px;z-index:276;background:red;table-layout:fixed" id="Table2">
+                <table style="position:absolute;left:0px;top:0px;width:858px;height:80px;z-index:276;table-layout:fixed" id="Table2">
                     <tr>
-                        <td class="cell90" colspan="4" style="background:cornflowerblue;height:25px">
+                        <td class="cell90" colspan="3" style="background:cornflowerblue;height:25px">
                             <div style="text-align:center;font-size:17px">Download blank scoresheets</div>
                         </td>
                     </tr>
@@ -207,13 +209,10 @@
                             <div style="text-align:center;font-size:14px">Rotation Slips</div>
                         </td>
                         <td class="cell91" colspan="1" style="background:orange">
-                            <div style="text-align:center;font-size:14px">WAVL 5 Set</div>
-                        </td>
-                        <td class="cell91" colspan="1" style="background:yellowgreen">
-                            <div style="text-align:center;font-size:14px">WAVL 3 Set</div>
+                            <div style="text-align:center;font-size:14px">WAVL Scoresheet</div>
                         </td>
                         <td class="cell91" colspan="1" style="background:yellow">
-                            <div style="text-align:center;font-size:14px">Junior League</div>
+                            <div style="text-align:center;font-size:14px">Junior League<br>Scoresheet</div>
                         </td>
                         <!--<td class="cell91" colspan="1" style="background:purple">
                             <div style="text-align:center;font-size:14px">2021 Venue Schedules</div>
