@@ -54,7 +54,7 @@ def home():
 
         items.append(item)
 
-    return render_template("volleyballwa.github.io.html", items=items)
+    return render_template("vwa-export.html", items=items)
 
 
 @app.route("/WAVL/PUT", methods=["PUT", "POST", "GET"])
@@ -205,4 +205,4 @@ def cleanup():
 
 
 if __name__ == "__main__":
-    app.run(host='localhost', port=5000)
+    app.run(host='127.0.0.1', port=5000)

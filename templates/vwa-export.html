@@ -4,6 +4,9 @@
         <meta charset="utf-8">
         <title>VWA Scoresheets</title>
         <meta name="generator" content="WYSIWYG Web Builder 16 Trial Version - https://www.wysiwygwebbuilder.com">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
         <link href="../static/base/jquery-ui.min.css" rel="stylesheet">
         <link href="../static/Untitled1.css" rel="stylesheet">
         <link href="../static/page1.css" rel="stylesheet">
@@ -12,11 +15,13 @@
         <link rel="apple-touch-icon" href="https://volleyballwa.com.au/wp-content/uploads/2021/03/cropped-VWA_logo_vertical_forBlackBG-300x300.png">
         <script src="../static/jquery-1.12.4.min.js"></script>
         <script src="../static/jquery-ui.min.js"></script>
-        <script src="../static/WAVL.js"></script>
+        <script type="module" src="../static/sources/config.js"></script>
+        <script type="module" src="../static/WAVL.js"></script>
         <script src="https://unpkg.com/pdf-lib@1.16.0"></script>
         <script src="https://unpkg.com/pdf-lib@1.16.0/dist/pdf-lib.js"></script>
         <script src="https://unpkg.com/pdf-lib@1.16.0/dist/pdf-lib.min.js"></script>
         <script src="https://unpkg.com/downloadjs@1.4.7"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script>
             function nextSunday(){
                 var d = new Date()
@@ -47,8 +52,8 @@
             <a href="https://www.wysiwygwebbuilder.com" target="_blank"><img src="../static/images/builtwithwwb16.png" alt="WYSIWYG Web Builder" style="position:absolute;left:254px;top:230px;margin: 0;border-width:0;z-index:250"></a>
             <div id="wb_Form2" style="position:absolute;left:56px;top:144px;width:858px;height:220px;z-index:276;">
                 <form name="WAVL_Advanced" id="Form2">
-                    <input type="button" id="Button4" name="Generate Scoresheets" value="Generate Scoresheets" style="position:absolute;left:450px;top:74px;width:243px;height:50px;z-index:89;" onclick="WAVL_MAIN()">
-                    <input type="button" id="Button4" name="ONLINE" value="ONLINE" style="position:absolute;left:450px;top:20px;width:243px;height:50px;z-index:89;" onclick="WAVL_ONLINE()">
+                    <input type="button" id="Button4" name="Generate Scoresheets" value="Generate Scoresheets" style="position:absolute;left:450px;top:74px;width:243px;height:50px;z-index:89;" onclick="WAVL_ONLINE()">
+                    <!--<input type="button" id="Button45" name="ONLINE" value="ONLINE" style="position:absolute;left:450px;top:20px;width:243px;height:50px;z-index:89;" onclick="WAVL_ONLINE()">-->
                     <div id="wb_Checkbox99">
                         <input type="checkbox" id="Checkbox99" name="Force?" value="on" checked="" style="display:inline-block;" title="Use cached scoresheets?" style="position:absolute;left:450px;top:140px;z-index:89;">
                         <label for="Checkbox99"></label>
